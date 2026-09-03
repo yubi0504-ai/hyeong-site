@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>hyeong™ — Studio</title>
+  <meta name="description" content="hyeong™ — 일상과 미래를 동시에 설계하는 디자인 스튜디오">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── Studio 페이지 전용 스타일 ── */
+
+    /* ① 연속 가로 갤러리 섹션 (글씨 시작 그리드 좌측 라인에 맞춰 정확히 마스킹/잘림) */
+    .studio-gallery-section {
+      margin-top: var(--header-h);
+      padding: 32px var(--pad) 20px;
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .gallery-strip-container {
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none; /* Firefox */
+      cursor: grab;
+      user-select: none;
+    }
+
+    .gallery-strip-container::-webkit-scrollbar {
+      display: none; /* Chrome, Safari */
+    }
+
+    .gallery-strip-container:active {
+      cursor: grabbing;
+    }
+
+    .gallery-strip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0;
+      min-width: 100%;
+    }
+
+    .gallery-strip-item {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gallery-strip-item img {
+      height: 56vh;
+      max-height: 640px;
+      min-height: 320px;
+      width: auto;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+    }
+
+    /* 갤러리에 마우스를 가져가면 저절로 나타나는 흰색 > 화살표 */
+    .gallery-arrow {
+      position: absolute;
+      top: calc(32px + 28vh);
+      transform: translateY(-50%);
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      cursor: pointer;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.25s ease;
+      z-index: 10;
+      filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
+      user-select: none;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    .gallery-arrow-right {
+      right: calc(var(--pad) + 14px);
+    }
+
+    .gallery-arrow-left {
+      left: calc(var(--pad) + 14px);
+    }
+
+    .studio-gallery-section:hover .gallery-arrow {
+      opacity: 0.85;
+      pointer-events: auto;
+    }
+
+    .gallery-arrow:hover {
+      opacity: 1 !important;
+      transform: translateY(-50%) scale(1.15);
+    }
+
+    .gallery-arrow svg {
+      width: 32px;
+      height: 32px;
+      stroke: #ffffff;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    /* ② 스튜디오 소개 섹션 (첨부 이미지 레이아웃: 좌측 영문, 우측 한글 좌우 2열 전개) */
+    .studio-intro {
+      padding: 96px var(--pad) 80px;
+      width: 100%;
+    }
+
+    .intro-header {
+      margin-bottom: 56px;
+    }
+
+    .intro-title-line {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #000000;
+      letter-spacing: -0.2px;
+      margin-bottom: 4px;
+    }
+
+    .intro-name-en {
+      font-size: 16px;
+      font-weight: 700;
+      color: #000000;
+    }
+
+    .intro-name-kr {
+      font-size: 15px;
+      font-weight: 700;
+      color: #000000;
+    }
+
+    .intro-sub-role {
+      font-size: 14.5px;
+      font-weight: 700;
+      line-height: 1.5;
+      color: #000000;
+    }
+
+    /* 좌우 2열 본문 그리드 */
+    .intro-columns-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7vw;
+      align-items: start;
+    }
+
+    .intro-col {
+      font-size: 15.5px;
+      font-weight: 700;
+      line-height: 1.7;
+      color: #000000;
+      word-break: keep-all;
+    }
+
+    .intro-col-en {
+      letter-spacing: -0.05px;
+    }
+
+    .intro-col-kr {
+      letter-spacing: -0.25px;
+    }
+
+    /* 서브 섹션 블록 (Objet Series / Future products) */
+    .intro-sub-sections {
+      margin-top: 120px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .intro-sub-block {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .intro-sub-title {
+      font-size: 15.5px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      color: #000000;
+      margin-bottom: 16px;
+    }
+
+    /* ③ 인물 소개 (Team) 섹션 — 상하 세로 1열 배치 & 하단 상세 소개 */
+    .studio-team {
+      padding: 32px var(--pad) 140px;
+      width: 100%;
+    }
+
+    .team-section-header {
+      font-size: 15.5px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      color: #000000;
+      margin-bottom: 48px;
+    }
+
+    .team-list {
+      display: flex;
+      flex-direction: column;
+      gap: 110px;
+    }
+
+    .person-card {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .person-image-wrap {
+      width: 100%;
+      max-width: 540px;
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+
+    .person-image-wrap img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .person-header {
+      margin-bottom: 24px;
+    }
+
+    .person-name-line {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      color: #000000;
+      letter-spacing: -0.2px;
+      margin-bottom: 4px;
+    }
+
+    .person-role {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: #000000;
+    }
+
+    .person-bio-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7vw;
+      align-items: start;
+    }
+
+    .person-bio-col {
+      font-size: 15.5px;
+      font-weight: 700;
+      line-height: 1.7;
+      color: #000000;
+      word-break: keep-all;
+    }
+
+    .person-bio-col.en {
+      letter-spacing: -0.05px;
+    }
+
+    .person-bio-col.kr {
+      letter-spacing: -0.25px;
+    }
+
+    /* ④ 팀 활동 / 커리어 섹션 */
+    .studio-career {
+      padding: 24px var(--pad) 80px;
+      width: 100%;
+    }
+
+    /* ⑤ 어워드 및 파트너 로고 배너 (맨 아래) */
+    .studio-awards-banner {
+      padding: 10px var(--pad) 140px;
+      width: 100%;
+    }
+
+    .awards-banner-img {
+      width: 100%;
+      max-width: 680px;
+      height: auto;
+      display: block;
+      object-fit: contain;
+      image-rendering: -webkit-optimize-contrast;
+    }
+
+    .career-section-header {
+      font-size: 15.5px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      color: #000000;
+      margin-bottom: 48px;
+    }
+
+    .career-block {
+      margin-bottom: 48px;
+    }
+
+    .career-cat {
+      font-size: 15.5px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      color: #000000;
+      margin-bottom: 16px;
+    }
+
+    .career-row {
+      display: flex;
+      align-items: baseline;
+      gap: 36px;
+      padding: 6px 0;
+    }
+
+    .career-year {
+      flex: 0 0 110px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #000000;
+      letter-spacing: 0.3px;
+    }
+
+    .career-items {
+      flex: 1;
+    }
+
+    .career-item {
+      font-size: 14px;
+      font-weight: 700;
+      color: #000000;
+      line-height: 1.75;
+    }
+
+    /* 반응형 */
+    @media (max-width: 900px) {
+      .intro-columns-grid {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+      .gallery-strip-item img {
+        height: 36vh;
+        min-height: 220px;
+      }
+      .studio-intro {
+        padding: 64px var(--pad) 48px;
+      }
+      .intro-col {
+        font-size: 14.5px;
+      }
+      .career-row {
+        flex-direction: column;
+        gap: 2px;
+      }
+      .career-year {
+        flex: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 헤더 -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="about.html" class="logo">
+        <img src="LOGO.png" alt="hyeong™">
+      </a>
+      <button class="menu-toggle" aria-label="메뉴 열기">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="main-nav">
+        <a href="about.html">Studio</a>
+        <a href="work.html">Work</a>
+        <a href="mailto:parkyubi@gmail.com">Contact</a>
+        <a href="https://smartstore.naver.com/hyeong_studio/products/13724689293" target="_blank" rel="noopener noreferrer">Shop</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ① 이미지 갤러리 (자연스럽게 이어지며 스크롤되는 스트립) -->
+    <section class="studio-gallery-section">
+      <div class="gallery-strip-container" id="galleryContainer">
+        <div class="gallery-strip" id="galleryStrip">
+          <div class="gallery-strip-item"><img src="00-PORTFOLIO_WEBSITE/cover-01.png" alt="hyeong™ studio 01"></div>
+          <div class="gallery-strip-item"><img src="00-PORTFOLIO_WEBSITE/new-05.jpg" alt="hyeong™ awards"></div>
+          <div class="gallery-strip-item"><img src="00-PORTFOLIO_WEBSITE/cover-02.png" alt="hyeong™ studio 02"></div>
+          <div class="gallery-strip-item"><img src="00-PORTFOLIO_WEBSITE/cover-06.png" alt="hyeong™ studio 06"></div>
+          <div class="gallery-strip-item"><img src="00-PORTFOLIO_WEBSITE/cover-03.png" alt="hyeong™ studio 03"></div>
+          <div class="gallery-strip-item"><img src="00-PORTFOLIO_WEBSITE/cover-04.png" alt="hyeong™ studio 04"></div>
+          <div class="gallery-strip-item"><img src="00-PORTFOLIO_WEBSITE/cover-05.png" alt="hyeong™ studio 05"></div>
+          <div class="gallery-strip-item"><img src="00-PORTFOLIO_WEBSITE/cover-07.png" alt="hyeong™ studio 07"></div>
+          <div class="gallery-strip-item"><img src="00-PORTFOLIO_WEBSITE/cover-08.png" alt="hyeong™ studio 08"></div>
+          <div class="gallery-strip-item"><img src="00-PORTFOLIO_WEBSITE/cover-09.png" alt="hyeong™ studio 09"></div>
+          <div class="gallery-strip-item"><img src="00-PORTFOLIO_WEBSITE/cover-10.png" alt="hyeong™ studio 10"></div>
+          <div class="gallery-strip-item"><img src="00-PORTFOLIO_WEBSITE/cover-11.png" alt="hyeong™ studio 11"></div>
+          <div class="gallery-strip-item"><img src="00-PORTFOLIO_WEBSITE/new-01.png" alt="hyeong™ studio work 01"></div>
+          <div class="gallery-strip-item"><img src="00-PORTFOLIO_WEBSITE/new-02.png" alt="hyeong™ studio work 02"></div>
+          <div class="gallery-strip-item"><img src="00-PORTFOLIO_WEBSITE/new-03.jpg" alt="hyeong™ studio work 03"></div>
+          <div class="gallery-strip-item"><img src="00-PORTFOLIO_WEBSITE/new-04.png" alt="hyeong™ studio work 04"></div>
+        </div>
+      </div>
+
+      <!-- 호버 시 나타나는 미니멀 흰색 화살표 (클릭 시 가로 스크롤) -->
+      <button class="gallery-arrow gallery-arrow-left" id="galleryArrowLeft" aria-label="이전 이미지">
+        <svg viewBox="0 0 24 24">
+          <polyline points="15 18 9 12 15 6"></polyline>
+        </svg>
+      </button>
+      <button class="gallery-arrow gallery-arrow-right" id="galleryArrowRight" aria-label="다음 이미지">
+        <svg viewBox="0 0 24 24">
+          <polyline points="9 6 15 12 9 18"></polyline>
+        </svg>
+      </button>
+    </section>
+
+    <!-- ② 스튜디오 소개 (첨부 이미지 레이아웃: 좌측 영문, 우측 한글 좌우 2열 전개) -->
+    <section class="studio-intro">
+      <div class="intro-header">
+        <div class="intro-title-line">
+          <span class="intro-name-en">hyeong™</span>
+          <span class="intro-name-kr">형</span>
+        </div>
+        <p class="intro-sub-role">
+          Industrial Design Studio
+        </p>
+      </div>
+
+      <div class="intro-columns-grid">
+        <!-- 좌측: 영문 본문 -->
+        <div class="intro-col intro-col-en">
+          <p>
+            hyeong is a design studio founded by two university students based in South Korea. Rooted in ergonomics and formative art, we pursue user-friendly design that seamlessly integrates into daily life, presenting witty and thoughtful objects. We also explore uncharted territories to design future-oriented values, seek diverse possibilities, and strive to create a positive impact on society. Based on in-depth exploration of formative language, ergonomic research, and close collaboration, we realize usability and aesthetics from multifaceted perspectives to design optimized user experiences. While presenting witty objects that naturally permeate daily life, we explore uncharted territories to propose futuristic values, aiming for design that makes a positive impact on society and practices social contribution.
+          </p>
+        </div>
+
+        <!-- 우측: 한국어 본문 -->
+        <div class="intro-col intro-col-kr">
+          <p>
+            형은 한국에서 활동하는 두 명의 대학생이 결성한 디자인 스튜디오로 인간 공학과 조형을 기반으로 사용 친화적인 디자인을 추구하며, 일상에 자연스럽게 스며들며 위트 있는 오브제를 선보입니다. 또한 미답의 영역을 탐구하며 미래적 가치를 설계하고, 다양한 가능성을 모색하여 사회에 긍정적인 영향을 실천하고자 합니다. 조형 언어에 대한 깊이 있는 탐구와 인간공학적 연구, 긴밀한 협업을 바탕으로 사용성과 조형미를 다각도로 구현하며 최적화된 사용자 경험을 설계합니다. 일상에 자연스럽게 스며드는 위트 있는 오브제를 선보이는 동시에, 미답의 영역을 탐색하여 미래적 가치를 제안합니다. 다양한 가능성을 모색함으로써 사회에 긍정적인 영향을 미치고 사회적 공헌을 실천하는 디자인을 지향합니다.
+          </p>
+        </div>
+      </div>
+
+      <!-- Objet & Future products 서브 섹션 -->
+      <div class="intro-sub-sections">
+        <!-- Objet Series -->
+        <div class="intro-sub-block">
+          <h2 class="intro-sub-title">Objet Series</h2>
+          <div class="intro-columns-grid">
+            <div class="intro-col intro-col-en">
+              <p>
+                We practice daily-life-oriented product design that harmonizes with any space anytime, anywhere, and can be easily used by anyone.
+              </p>
+            </div>
+            <div class="intro-col intro-col-kr">
+              <p>
+                언제 어디서든 공간과 조화를 이루며, 누구나 쉽게 사용할 수 있는 생활 밀착형 제품 디자인을 실천합니다.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Future products -->
+        <div class="intro-sub-block">
+          <h2 class="intro-sub-title">Future products</h2>
+          <div class="intro-columns-grid">
+            <div class="intro-col intro-col-en">
+              <p>
+                We explore uncharted territories to design futuristic values and practice contributing to society through multifaceted exploration of possibilities.
+              </p>
+            </div>
+            <div class="intro-col intro-col-kr">
+              <p>
+                미답의 영역을 개척하여 미래적 가치를 설계하며 다각도의 가능성 모색을 통해 사회에 공헌하는 가치를 실천합니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ③ 인물 소개 (Team) -->
+    <section class="studio-team">
+      <div class="team-list">
+        <!-- 멤버 1: 박유비 -->
+        <article class="person-card">
+          <div class="person-image-wrap">
+            <img src="03-PROFILE/park-yubi-profile.png" alt="Park Yubi 박유비">
+          </div>
+          <div class="person-header">
+            <div class="person-name-line">
+              <span class="person-name-en">Park Yubi</span>
+              <span class="person-name-kr">박유비</span>
+            </div>
+            <p class="person-role">Co-founder, Future Products Lead</p>
+          </div>
+          <div class="person-bio-grid">
+            <div class="person-bio-col en">
+              <p>
+                Exploring the essential structure of objects and patterns of human behavior, he pursues design where functionality and aesthetic tension coexist. Grounded in a deep understanding of prototyping and production processes, he realizes creative concepts into solid physical products.
+              </p>
+            </div>
+            <div class="person-bio-col kr">
+              <p>
+                사물의 본질적인 구조와 사용자의 행동 양식을 깊이 있게 탐구하며, 기능성과 조형적 긴장감이 조화를 이루는 디자인을 추구합니다. 프로토타이핑과 실질적인 양산 공정에 대한 이해를 바탕으로 창의적인 컨셉을 견고한 제품으로 구현합니다.
+              </p>
+            </div>
+          </div>
+        </article>
+
+        <!-- 멤버 2: 박채운 -->
+        <article class="person-card">
+          <div class="person-image-wrap">
+            <img src="03-PROFILE/park-chaeun-profile.png" alt="Park Chaeun 박채운">
+          </div>
+          <div class="person-header">
+            <div class="person-name-line">
+              <span class="person-name-en">Park Chaeun</span>
+              <span class="person-name-kr">박채운</span>
+            </div>
+            <p class="person-role">Co-founder, Objet Series Lead</p>
+          </div>
+          <div class="person-bio-grid">
+            <div class="person-bio-col en">
+              <p>
+                Delicately observing subtle daily sensibilities and users' implicit experiences, he translates them into witty and intuitive formative language. Exploring future-oriented values and emerging lifestyles, he designs sustainable objects that naturally permeate everyday life.
+              </p>
+            </div>
+            <div class="person-bio-col kr">
+              <p>
+                일상의 미세한 감각과 사용자의 잠재적 경험을 섬세하게 관찰하여 위트 있고 직관적인 조형 언어로 풀어냅니다. 미래 지향적인 가치와 새로운 라이프스타일을 탐색하며 사람들의 일상에 자연스럽게 스며드는 지속 가능한 오브제를 설계합니다.
+              </p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ④ 팀 활동 / 커리어 -->
+    <section class="studio-career">
+      <h2 class="career-section-header">Team Activity</h2>
+
+      <!-- Education (산업디자인학과 명시) -->
+      <div class="career-block">
+        <p class="career-cat">Education</p>
+        <div class="career-row">
+          <span class="career-year">2024</span>
+          <div class="career-items">
+            <p class="career-item">Kaywon Art &amp; Design (Dept. of Industrial Design)</p>
+          </div>
+        </div>
+        <div class="career-row">
+          <span class="career-year">2026</span>
+          <div class="career-items">
+            <p class="career-item">Yonsei University (Dept. of Industrial Design)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Award -->
+      <div class="career-block">
+        <p class="career-cat">Award</p>
+        <div class="career-row">
+          <span class="career-year">2026</span>
+          <div class="career-items">
+            <p class="career-item">Spark Design Awards 2026 Silver Winner</p>
+            <p class="career-item">Pin Up Concept Design Awards 2026 Finalist</p>
+            <p class="career-item">Pin Up Concept Design Awards 2026 Finalist</p>
+          </div>
+        </div>
+        <div class="career-row">
+          <span class="career-year">2025</span>
+          <div class="career-items">
+            <p class="career-item">Red Dot Design Award 2025 Winner</p>
+            <p class="career-item">iF Design Student Award 2025 Shortlist 300</p>
+            <p class="career-item">Korea International Design Award 2025 Bronze (특허청장)</p>
+            <p class="career-item">Korea International Design Award 2025 Special Selection</p>
+            <p class="career-item">Korea International Design Award 2025 Winner</p>
+            <p class="career-item">Korea International Design Award 2025 Winner</p>
+            <p class="career-item">Design Intelligence Award Honorable Mention</p>
+            <p class="career-item">Design it award challenge 2025 Excellence Award</p>
+          </div>
+        </div>
+        <div class="career-row">
+          <span class="career-year">2024</span>
+          <div class="career-items">
+            <p class="career-item">K-Design Award Winner</p>
+            <p class="career-item">Design it award challenge 2024 Silver</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Experience -->
+      <div class="career-block">
+        <p class="career-cat">Experience</p>
+        <div class="career-row">
+          <span class="career-year">2026 / 2025</span>
+          <div class="career-items">
+            <p class="career-item">Yonsei University Seonhaeng × Hanyang University IDM Exchange Program</p>
+            <p class="career-item">3D Modeling &amp; Rendering Instructor at Yonsei University (Dept. of Industrial Design)</p>
+            <p class="career-item">Design Korea 2025 사업화 IR Pitching — Commercialization IR Pitching</p>
+            <p class="career-item">Design Korea 2025 Dotmate Exhibition</p>
+            <p class="career-item">DDP 2025 Young Designer Festival</p>
+            <p class="career-item">DDP Design Fair 2025 Project with Aimban</p>
+            <p class="career-item">Reddot design museum Drop mate Exhibition</p>
+            <p class="career-item">LG Electronics Labor Robot Design &amp; Interaction Engineering</p>
+            <p class="career-item">LG Electronics H&amp;A UX Team LCD-Embedded Door Lock Research</p>
+            <p class="career-item">Aimban Headrest Design &amp; Development</p>
+            <p class="career-item">ATID Industrial Design Group, Kaywon University</p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ⑤ 어워드 및 파트너 로고 배너 (맨 아래) -->
+    <section class="studio-awards-banner">
+      <img class="awards-banner-img" src="00-PORTFOLIO_WEBSITE/awards-strip.png" alt="Awards &amp; Partners — Red Dot, Spark Design Awards, KDM, Pin Up, DIA, DDP Design Fair, Design Korea">
+    </section>
+
+  </main>
+
+  <!-- 푸터 -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-copyright">© 2024 hyeong™ All Rights Reserved.</p>
+      <div class="footer-links">
+        <a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a>
+        <a href="mailto:parkyubi@gmail.com">Email</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+  <script>
+    /* ── 이미지 스트립 가로 드래그 & 휠 스크롤 제어 ── */
+    const container = document.getElementById('galleryContainer');
+    let isDown = false;
+    let startX = 0;
+    let scrollLeftPos = 0;
+
+    // 마우스 드래그 스크롤
+    container.addEventListener('mousedown', (e) => {
+      isDown = true;
+      container.style.scrollBehavior = 'auto';
+      startX = e.pageX - container.offsetLeft;
+      scrollLeftPos = container.scrollLeft;
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (!isDown) return;
+      isDown = false;
+      container.style.scrollBehavior = 'smooth';
+    });
+
+    container.addEventListener('mouseleave', () => {
+      if (!isDown) return;
+      isDown = false;
+      container.style.scrollBehavior = 'smooth';
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDown) return;
+      e.preventDefault();
+      const x = e.pageX - container.offsetLeft;
+      const walk = (x - startX) * 1.5;
+      container.scrollLeft = scrollLeftPos - walk;
+    });
+
+    // 휠 가로 스크롤 (세로 휠 입력을 가로 스크롤로 매끄럽게 전환)
+    container.addEventListener('wheel', (e) => {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        e.preventDefault();
+        container.scrollLeft += e.deltaY;
+      }
+    }, { passive: false });
+
+    // 호버 화살표 클릭 시 부드러운 가로 스크롤
+    const arrowLeft = document.getElementById('galleryArrowLeft');
+    const arrowRight = document.getElementById('galleryArrowRight');
+
+    if (arrowRight) {
+      arrowRight.addEventListener('click', (e) => {
+        e.stopPropagation();
+        container.scrollBy({ left: window.innerWidth * 0.45, behavior: 'smooth' });
+      });
+    }
+
+    if (arrowLeft) {
+      arrowLeft.addEventListener('click', (e) => {
+        e.stopPropagation();
+        container.scrollBy({ left: -window.innerWidth * 0.45, behavior: 'smooth' });
+      });
+    }
+  </script>
+</body>
+</html>
