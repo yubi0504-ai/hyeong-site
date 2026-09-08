@@ -3,90 +3,91 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>hyeong™ — Design Studio</title>
-  <meta name="description" content="hyeong™ — 일상과 미래를 동시에 설계하는 디자인 스튜디오">
+  <title>hyeong™</title>
+  <meta name="description" content="hyeong™ — Design Studio">
   <link rel="stylesheet" href="css/style.css">
   <style>
-    /* 메인 인덱스 전용 시네마틱 / 미니멀 레이아웃 */
+    /* 메인 인덱스: 글씨를 최소화하고 작품 비주얼에 몰입하는 미니멀 쇼케이스 */
     .home-main {
-      padding-top: var(--header-h);
-      min-height: calc(100vh - 80px);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .home-hero-section {
+      padding-top: calc(var(--header-h) + 20px);
+      padding-bottom: 80px;
       width: 100%;
-      padding: 6vh var(--pad) 4vh;
-      display: flex;
-      flex-direction: column;
-      gap: 32px;
     }
 
-    .home-hero-statement {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .home-title {
-      font-size: clamp(30px, 3.8vw, 52px);
-      font-weight: 700;
-      line-height: 1.2;
-      letter-spacing: -0.035em;
-      color: #000000;
-      word-break: keep-all;
-    }
-
-    .home-sub {
-      font-size: 15px;
-      font-weight: 700;
-      line-height: 1.6;
-      letter-spacing: -0.01em;
-      color: #000000;
-      max-width: 600px;
-      word-break: keep-all;
-    }
-
-    /* 피처드 비주얼 쇼케이스 */
-    .home-showcase {
+    .home-showcase-container {
       width: 100%;
-      padding: 0 var(--pad) 60px;
+      padding: 0 var(--pad);
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
     }
 
-    .home-showcase-grid {
-      display: grid;
-      grid-template-columns: 1.3fr 1fr;
-      gap: 24px;
-      align-items: stretch;
-    }
-
-    .showcase-card {
+    /* 상단 대형 비디오 히어로 (Grip 시네마틱) */
+    .home-hero-media {
+      width: 100%;
+      height: 75vh;
+      min-height: 480px;
+      max-height: 800px;
       position: relative;
+      overflow: hidden;
+      background: #000000;
+      display: block;
+      text-decoration: none;
+    }
+
+    .home-hero-media video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+    }
+
+    .home-hero-media:hover video {
+      transform: scale(1.02);
+      opacity: 0.92;
+    }
+
+    .home-hero-badge {
+      position: absolute;
+      bottom: 24px;
+      left: 24px;
+      color: #ffffff;
+      font-size: 13.5px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
       display: flex;
-      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      mix-blend-mode: difference;
+      pointer-events: none;
+    }
+
+    /* 하단 핵심 작품 3열 미니멀 그리드 */
+    .home-works-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      width: 100%;
+    }
+
+    .home-work-item {
+      display: block;
       text-decoration: none;
       color: #000000;
-      overflow: hidden;
-      background: #e9e9e9;
-    }
-
-    .showcase-card:hover {
-      opacity: 0.95;
-    }
-
-    .showcase-card__img-box {
-      width: 100%;
-      height: 56vh;
-      min-height: 380px;
-      max-height: 640px;
-      overflow: hidden;
       position: relative;
     }
 
-    .showcase-card__img-box img,
-    .showcase-card__img-box video {
+    .home-work-item__thumb {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
+      background: #eaeaea;
+      position: relative;
+      margin-bottom: 10px;
+    }
+
+    .home-work-item__thumb img {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -94,79 +95,43 @@
       transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .showcase-card:hover .showcase-card__img-box img,
-    .showcase-card:hover .showcase-card__img-box video {
+    .home-work-item:hover .home-work-item__thumb img {
       transform: scale(1.03);
     }
 
-    .showcase-card__caption {
-      padding: 16px 4px 6px;
+    .home-work-item__info {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      border-bottom: 2px solid #000000;
     }
 
-    .showcase-card__name {
-      font-size: 15.5px;
+    .home-work-title {
+      font-size: 14px;
       font-weight: 700;
       letter-spacing: -0.2px;
     }
 
-    .showcase-card__meta {
-      font-size: 13px;
+    .home-work-arrow {
+      font-size: 12px;
       font-weight: 700;
-      letter-spacing: -0.1px;
-    }
-
-    /* 하단 퀵 내비게이션 바 */
-    .home-quick-nav {
-      width: 100%;
-      padding: 20px var(--pad) 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    .home-nav-group {
-      display: flex;
-      gap: 28px;
-    }
-
-    .home-nav-link {
-      font-size: 14px;
-      font-weight: 700;
-      color: #000000;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      transition: opacity 0.2s ease;
-    }
-
-    .home-nav-link:hover {
       opacity: 0.5;
+      transition: transform 0.2s ease, opacity 0.2s ease;
     }
 
-    .home-year-tag {
-      font-size: 13px;
-      font-weight: 700;
-      color: #000000;
+    .home-work-item:hover .home-work-arrow {
+      opacity: 1;
+      transform: translate(2px, -2px);
     }
 
+    /* 반응형 */
     @media (max-width: 900px) {
-      .home-showcase-grid {
+      .home-hero-media {
+        height: 55vh;
+        min-height: 360px;
+      }
+      .home-works-grid {
         grid-template-columns: 1fr;
-        gap: 40px;
-      }
-      .showcase-card__img-box {
-        height: 44vh;
-        min-height: 300px;
-      }
-      .home-title {
-        font-size: 30px;
+        gap: 32px;
       }
     }
   </style>
@@ -191,60 +156,58 @@
     </div>
   </header>
 
-  <!-- 메인 본문 -->
+  <!-- 메인 본문: 순수 비주얼 쇼케이스 -->
   <main class="home-main">
-    
-    <!-- 타이틀 / 선언문 섹션 -->
-    <section class="home-hero-section">
-      <div class="home-hero-statement">
-        <h1 class="home-title">
-          We shape future objects<br>
-          and everyday rituals.
-        </h1>
-        <p class="home-sub">
-          hyeong™은 제품 디자인, 미래 제품 컨셉, 오브제를 탐구하는 서울·원주 기반의 인더스트리얼 디자인 스튜디오입니다.
-        </p>
-      </div>
-    </section>
+    <div class="home-showcase-container">
 
-    <!-- 메인 비주얼 피처드 쇼케이스 (영상 & 대표작 듀오) -->
-    <section class="home-showcase">
-      <div class="home-showcase-grid">
-        
-        <!-- 피처드 1: Grip 인터랙티브 비디오 쇼케이스 -->
-        <a href="works/grip.html" class="showcase-card">
-          <div class="showcase-card__img-box">
-            <video src="video/grip-video.mp4" autoplay muted loop playsinline></video>
-          </div>
-          <div class="showcase-card__caption">
-            <span class="showcase-card__name">Grip — Handle Design Study</span>
-            <span class="showcase-card__meta">2026 / Feature ↗</span>
-          </div>
-        </a>
+      <!-- ① 메인 풀와이드 비디오 (Grip 동작 모션) -->
+      <a href="works/grip.html" class="home-hero-media">
+        <video src="video/grip-video.mp4" autoplay muted loop playsinline></video>
+        <div class="home-hero-badge">
+          <span>Grip</span>
+          <span>↗</span>
+        </div>
+      </a>
 
-        <!-- 피처드 2: Dropmate 대표작 쇼케이스 -->
-        <a href="works/dropmate.html" class="showcase-card">
-          <div class="showcase-card__img-box">
+      <!-- ② 대표 작품 미니멀 비주얼 3열 그리드 -->
+      <div class="home-works-grid">
+
+        <!-- 작품 1: Dropmate -->
+        <a href="works/dropmate.html" class="home-work-item">
+          <div class="home-work-item__thumb">
             <img src="01-WORK-COVERS/Dropmate-new.png" alt="Dropmate">
           </div>
-          <div class="showcase-card__caption">
-            <span class="showcase-card__name">Dropmate — Insulin Solution</span>
-            <span class="showcase-card__meta">2024 / Future Product ↗</span>
+          <div class="home-work-item__info">
+            <span class="home-work-title">Dropmate</span>
+            <span class="home-work-arrow">↗</span>
+          </div>
+        </a>
+
+        <!-- 작품 2: Jjindobaegi -->
+        <a href="works/jin.html" class="home-work-item">
+          <div class="home-work-item__thumb">
+            <img src="01-WORK-COVERS/Jin.png" alt="Jjindobaegi">
+          </div>
+          <div class="home-work-item__info">
+            <span class="home-work-title">Jjindobaegi</span>
+            <span class="home-work-arrow">↗</span>
+          </div>
+        </a>
+
+        <!-- 작품 3: siseon -->
+        <a href="works/siseon.html" class="home-work-item">
+          <div class="home-work-item__thumb">
+            <img src="01-WORK-COVERS/siseon.png" alt="siseon">
+          </div>
+          <div class="home-work-item__info">
+            <span class="home-work-title">siseon</span>
+            <span class="home-work-arrow">↗</span>
           </div>
         </a>
 
       </div>
-    </section>
 
-    <!-- 하단 퀵 링크 -->
-    <div class="home-quick-nav">
-      <div class="home-nav-group">
-        <a href="work.html" class="home-nav-link">View All Projects (6) →</a>
-        <a href="about.html" class="home-nav-link">About Studio →</a>
-      </div>
-      <span class="home-year-tag">hyeong™ © 2026</span>
     </div>
-
   </main>
 
   <!-- 푸터 -->
