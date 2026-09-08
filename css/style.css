@@ -494,10 +494,10 @@ ul, ol { list-style: none; }
 }
 
 .project-nav a, .project-nav__back {
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: -0.1px;
   color: var(--color-text);
 }
 
