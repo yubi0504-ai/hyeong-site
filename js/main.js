@@ -9,34 +9,40 @@ document.addEventListener('DOMContentLoaded', () => {
   initImageLoadAnimations();
 });
 
-/* --- 헤더 스크롤 동작 --- */
+/* --- 헤더 스크롤 동작 (스크롤 다운 시 점차 사라지고 스크롤 업 시 다시 나타남) --- */
 function initHeader() {
   const header = document.querySelector('.site-header');
   if (!header) return;
 
-  let lastScrollY = 0;
+  let lastScrollY = window.scrollY;
   let ticking = false;
+  const scrollThreshold = 15; // 미세 스크롤 무시 임계값
 
   window.addEventListener('scroll', () => {
     if (!ticking) {
       window.requestAnimationFrame(() => {
-        handleHeaderScroll(header);
+        const currentScrollY = window.scrollY;
+        const diff = currentScrollY - lastScrollY;
+
+        // 최상단 근처일 때는 항상 표시
+        if (currentScrollY <= 40) {
+          header.classList.remove('is-hidden');
+        } else if (Math.abs(diff) > scrollThreshold) {
+          if (diff > 0) {
+            // 아래로 스크롤 시 점차 위로 사라짐
+            header.classList.add('is-hidden');
+          } else {
+            // 위로 스크롤 시 다시 나타남
+            header.classList.remove('is-hidden');
+          }
+          lastScrollY = currentScrollY;
+        }
+
         ticking = false;
       });
       ticking = true;
     }
-  });
-}
-
-function handleHeaderScroll(header) {
-  const currentScrollY = window.scrollY;
-
-  // 스크롤 시 그림자 추가
-  if (currentScrollY > 10) {
-    header.classList.add('is-scrolled');
-  } else {
-    header.classList.remove('is-scrolled');
-  }
+  }, { passive: true });
 }
 
 /* --- 모바일 메뉴 토글 --- */

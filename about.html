@@ -177,27 +177,6 @@
       letter-spacing: -0.25px;
     }
 
-    /* 서브 섹션 블록 (Objet Series / Future products) */
-    .intro-sub-sections {
-      margin-top: 120px;
-      display: flex;
-      flex-direction: column;
-      gap: 28px;
-    }
-
-    .intro-sub-block {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .intro-sub-title {
-      font-size: 15.5px;
-      font-weight: 700;
-      letter-spacing: -0.2px;
-      color: #000000;
-      margin-bottom: 16px;
-    }
-
     /* ③ 인물 소개 (Team) 섹션 — 상하 세로 1열 배치 & 하단 상세 소개 */
     .studio-team {
       padding: 32px var(--pad) 140px;
@@ -224,17 +203,60 @@
       width: 100%;
     }
 
+    .person-images-row {
+      display: flex;
+      align-items: stretch;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
     .person-image-wrap {
       width: 100%;
-      max-width: 540px;
+      max-width: 440px;
+      aspect-ratio: 686 / 1024;
       overflow: hidden;
       margin-bottom: 28px;
+      background: #f4f4f4;
+    }
+
+    .person-images-row .person-image-wrap {
+      margin-bottom: 0;
+      flex: 1;
+      max-width: 440px;
     }
 
     .person-image-wrap img {
       width: 100%;
-      height: auto;
+      height: 100%;
+      object-fit: cover;
       display: block;
+    }
+
+    .person-image-sub {
+      width: 100%;
+      flex: 1;
+      max-width: 440px;
+      aspect-ratio: 686 / 1024;
+      overflow: hidden;
+      background: #f4f4f4;
+    }
+
+    .person-image-sub img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 32% center;
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .person-images-row {
+        flex-direction: column;
+      }
+      .person-images-row .person-image-wrap,
+      .person-image-sub {
+        max-width: 100%;
+      }
     }
 
     .person-header {
@@ -259,10 +281,10 @@
     }
 
     .person-bio-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 7vw;
-      align-items: start;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 900px;
     }
 
     .person-bio-col {
@@ -386,10 +408,10 @@
         <span></span><span></span><span></span>
       </button>
       <nav class="main-nav">
-        <a href="about.html">Studio</a>
+        <a href="about.html" class="active">Studio</a>
         <a href="work.html">Work</a>
-        <a href="mailto:parkyubi@gmail.com">Contact</a>
         <a href="https://smartstore.naver.com/hyeong_studio/products/13724689293" target="_blank" rel="noopener noreferrer">Shop</a>
+        <a href="contact.html">Contact</a>
       </nav>
     </div>
   </header>
@@ -402,6 +424,8 @@
         <div class="gallery-strip" id="galleryStrip">
           <div class="gallery-strip-item"><img src="00-PORTFOLIO_WEBSITE/cover-01.png" alt="hyeong™ studio 01"></div>
           <div class="gallery-strip-item"><img src="00-PORTFOLIO_WEBSITE/new-05.jpg" alt="hyeong™ awards"></div>
+          <div class="gallery-strip-item"><img src="00-PORTFOLIO_WEBSITE/activity-01.jpg" alt="hyeong™ activity 01"></div>
+          <div class="gallery-strip-item"><img src="00-PORTFOLIO_WEBSITE/activity-02-bw.jpg" alt="hyeong™ activity 02" style="filter: grayscale(100%);"></div>
           <div class="gallery-strip-item"><img src="00-PORTFOLIO_WEBSITE/cover-02.png" alt="hyeong™ studio 02"></div>
           <div class="gallery-strip-item"><img src="00-PORTFOLIO_WEBSITE/cover-06.png" alt="hyeong™ studio 06"></div>
           <div class="gallery-strip-item"><img src="00-PORTFOLIO_WEBSITE/cover-03.png" alt="hyeong™ studio 03"></div>
@@ -459,103 +483,9 @@
           </p>
         </div>
       </div>
-
-      <!-- Objet & Future products 서브 섹션 -->
-      <div class="intro-sub-sections">
-        <!-- Objet Series -->
-        <div class="intro-sub-block">
-          <h2 class="intro-sub-title">Objet Series</h2>
-          <div class="intro-columns-grid">
-            <div class="intro-col intro-col-en">
-              <p>
-                We practice daily-life-oriented product design that harmonizes with any space anytime, anywhere, and can be easily used by anyone.
-              </p>
-            </div>
-            <div class="intro-col intro-col-kr">
-              <p>
-                언제 어디서든 공간과 조화를 이루며, 누구나 쉽게 사용할 수 있는 생활 밀착형 제품 디자인을 실천합니다.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Future products -->
-        <div class="intro-sub-block">
-          <h2 class="intro-sub-title">Future products</h2>
-          <div class="intro-columns-grid">
-            <div class="intro-col intro-col-en">
-              <p>
-                We explore uncharted territories to design futuristic values and practice contributing to society through multifaceted exploration of possibilities.
-              </p>
-            </div>
-            <div class="intro-col intro-col-kr">
-              <p>
-                미답의 영역을 개척하여 미래적 가치를 설계하며 다각도의 가능성 모색을 통해 사회에 공헌하는 가치를 실천합니다.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
     </section>
 
-    <!-- ③ 인물 소개 (Team) -->
-    <section class="studio-team">
-      <div class="team-list">
-        <!-- 멤버 1: 박유비 -->
-        <article class="person-card">
-          <div class="person-image-wrap">
-            <img src="03-PROFILE/park-yubi-profile.png" alt="Park Yubi 박유비">
-          </div>
-          <div class="person-header">
-            <div class="person-name-line">
-              <span class="person-name-en">Park Yubi</span>
-              <span class="person-name-kr">박유비</span>
-            </div>
-            <p class="person-role">Co-founder, Future Products Lead</p>
-          </div>
-          <div class="person-bio-grid">
-            <div class="person-bio-col en">
-              <p>
-                Exploring the essential structure of objects and patterns of human behavior, he pursues design where functionality and aesthetic tension coexist. Grounded in a deep understanding of prototyping and production processes, he realizes creative concepts into solid physical products.
-              </p>
-            </div>
-            <div class="person-bio-col kr">
-              <p>
-                사물의 본질적인 구조와 사용자의 행동 양식을 깊이 있게 탐구하며, 기능성과 조형적 긴장감이 조화를 이루는 디자인을 추구합니다. 프로토타이핑과 실질적인 양산 공정에 대한 이해를 바탕으로 창의적인 컨셉을 견고한 제품으로 구현합니다.
-              </p>
-            </div>
-          </div>
-        </article>
-
-        <!-- 멤버 2: 박채운 -->
-        <article class="person-card">
-          <div class="person-image-wrap">
-            <img src="03-PROFILE/park-chaeun-profile.png" alt="Park Chaeun 박채운">
-          </div>
-          <div class="person-header">
-            <div class="person-name-line">
-              <span class="person-name-en">Park Chaeun</span>
-              <span class="person-name-kr">박채운</span>
-            </div>
-            <p class="person-role">Co-founder, Objet Series Lead</p>
-          </div>
-          <div class="person-bio-grid">
-            <div class="person-bio-col en">
-              <p>
-                Delicately observing subtle daily sensibilities and users' implicit experiences, he translates them into witty and intuitive formative language. Exploring future-oriented values and emerging lifestyles, he designs sustainable objects that naturally permeate everyday life.
-              </p>
-            </div>
-            <div class="person-bio-col kr">
-              <p>
-                일상의 미세한 감각과 사용자의 잠재적 경험을 섬세하게 관찰하여 위트 있고 직관적인 조형 언어로 풀어냅니다. 미래 지향적인 가치와 새로운 라이프스타일을 탐색하며 사람들의 일상에 자연스럽게 스며드는 지속 가능한 오브제를 설계합니다.
-              </p>
-            </div>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- ④ 팀 활동 / 커리어 -->
+    <!-- ③ 팀 활동 / 커리어 -->
     <section class="studio-career">
       <h2 class="career-section-header">Team Activity</h2>
 
@@ -617,6 +547,7 @@
           <div class="career-items">
             <p class="career-item">Yonsei University Seonhaeng × Hanyang University IDM Exchange Program</p>
             <p class="career-item">3D Modeling &amp; Rendering Instructor at Yonsei University (Dept. of Industrial Design)</p>
+            <p class="career-item">선행(先行) Industrial Design Group, Yonsei Univ</p>
             <p class="career-item">Design Korea 2025 사업화 IR Pitching — Commercialization IR Pitching</p>
             <p class="career-item">Design Korea 2025 Dotmate Exhibition</p>
             <p class="career-item">DDP 2025 Young Designer Festival</p>
@@ -644,8 +575,8 @@
     <div class="footer-inner">
       <p class="footer-copyright">© 2024 hyeong™ All Rights Reserved.</p>
       <div class="footer-links">
-        <a href="https://www.instagram.com/" target="_blank" rel="noopener">Instagram</a>
-        <a href="mailto:parkyubi@gmail.com">Email</a>
+        <a href="https://www.instagram.com/hyeong2_studio?utm_source=ig_web_button_share_sheet&stkn=ZDNlZDc0MzIxNw" target="_blank" rel="noopener">Instagram</a>
+        <a href="mailto:hyeongdesign@gmail.com">Email</a>
       </div>
     </div>
   </footer>
