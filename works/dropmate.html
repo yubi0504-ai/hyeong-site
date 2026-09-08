@@ -31,50 +31,97 @@
 
   <!-- 메인 콘텐츠 -->
   <main class="main-content">
-    <div class="project-detail">
+    <div class="detail-story-layout">
       <div class="content-wrapper">
 
-        <!-- 프로젝트 정보 -->
-        <div class="project-hero fade-in">
-          <h1 class="project-hero__title">Dropmate</h1>
-          <div class="project-hero__meta">
-            <div class="project-hero__meta-item">
-              <strong>Category</strong>
-              Product Design
-            </div>
-            <div class="project-hero__meta-item">
-              <strong>Year</strong>
-              2024
-            </div>
-            <div class="project-hero__meta-item">
-              <strong>Role</strong>
-              Product Designer
+        <!-- ① 프로젝트 정보 & 개요 (시안 2열 구조) -->
+        <div class="detail-overview fade-in">
+          <div class="overview-left">
+            <span class="overview-category">Future Product</span>
+            <h1 class="overview-title">Dropmate</h1>
+            <div class="overview-meta-list">
+              <div class="overview-meta-row">
+                <span class="label">Client</span>
+                <span class="value">Hyeong</span>
+              </div>
+              <div class="overview-meta-row">
+                <span class="label">Services</span>
+                <span class="value">Industrial Design</span>
+              </div>
+              <div class="overview-meta-row">
+                <span class="label">Year</span>
+                <span class="value">2024</span>
+              </div>
+              <div class="overview-meta-row">
+                <span class="label">Designer</span>
+                <span class="value">Park Yubi</span>
+              </div>
             </div>
           </div>
-          <p class="project-hero__desc">
-            시각장애인의 정보 접근성을 향상시키기 위한 휴대용 점자 프린터입니다.
-            일상 속에서 쉽게 점자를 출력할 수 있도록 사용성과 휴대성에 중점을 두어 디자인하였습니다.
-            리서치, 컨셉 개발, 목업 제작, 프로토타이핑 등 전 과정을 수행하였습니다.
-          </p>
+
+          <div class="overview-right">
+            <p class="overview-desc-p">
+              시각장애인의 정보 접근성을 향상시키기 위한 휴대용 점자 프린터입니다. 일상 속에서 쉽게 점자를 출력할 수 있도록 사용성과 휴대성에 중점을 두어 디자인하였습니다.
+            </p>
+            <p class="overview-desc-p">
+              리서치, 컨셉 개발, 목업 제작, 프로토타이핑 등 전 과정을 수행하였으며 시각장애인 사용자의 직관적인 조작 환경을 구현했습니다.
+            </p>
+          </div>
         </div>
 
-        <!-- 프로젝트 이미지 -->
-        <div class="project-images">
-          <img src="../01-WORK-COVERS/Dropmate.png" alt="Dropmate 메인 이미지">
-          <img src="../02-WORK-DETAIL/Dropmate/1.png" alt="Dropmate 디테일 이미지 1">
-          <img src="../02-WORK-DETAIL/Dropmate/2.png" alt="Dropmate 디테일 이미지 2">
-          <img src="../02-WORK-DETAIL/Dropmate/3.png" alt="Dropmate 디테일 이미지 3">
-          <img src="../02-WORK-DETAIL/Dropmate/4.png" alt="Dropmate 디테일 이미지 4">
-          <img src="../02-WORK-DETAIL/Dropmate/5.png" alt="Dropmate 디테일 이미지 5">
-          <img src="../02-WORK-DETAIL/Dropmate/6.png" alt="Dropmate 디테일 이미지 6">
-          <img src="../02-WORK-DETAIL/Dropmate/7.png" alt="Dropmate 디테일 이미지 7">
-          <img src="../02-WORK-DETAIL/Dropmate/8.png" alt="Dropmate 디테일 이미지 8">
-          <img src="../02-WORK-DETAIL/Dropmate/9.png" alt="Dropmate 디테일 이미지 9">
+        <!-- ② 메인 이미지 흐름 -->
+        <div class="detail-story-flow">
+          <div class="story-block fade-in">
+            <img src="../01-WORK-COVERS/Dropmate.png" alt="Dropmate 00">
+          </div>
+          <div class="story-block fade-in">
+            <img src="../02-WORK-DETAIL/Dropmate/1.png" alt="Dropmate 01">
+          </div>
+          <div class="story-block fade-in">
+            <img src="../02-WORK-DETAIL/Dropmate/2.png" alt="Dropmate 02">
+          </div>
+          <div class="story-block fade-in">
+            <img src="../02-WORK-DETAIL/Dropmate/3.png" alt="Dropmate 03">
+          </div>
+
+          <!-- 1:1 정사각형 스토리 블록 -->
+          <div class="story-block story-block--square fade-in">
+            <img src="../02-WORK-DETAIL/Dropmate/4.png" alt="Dropmate 04">
+          </div>
+
+          <!-- 2열 분할 카드 듀오 1 -->
+          <div class="story-grid-2col fade-in">
+            <div class="story-card">
+              <img src="../02-WORK-DETAIL/Dropmate/5.png" alt="Dropmate 05">
+            </div>
+            <div class="story-card">
+              <img src="../02-WORK-DETAIL/Dropmate/6.png" alt="Dropmate 06">
+            </div>
+          </div>
+
+          <!-- 2열 분할 카드 듀오 2 -->
+          <div class="story-grid-2col fade-in">
+            <div class="story-card">
+              <img src="../02-WORK-DETAIL/Dropmate/7.png" alt="Dropmate 07">
+            </div>
+            <div class="story-card">
+              <img src="../02-WORK-DETAIL/Dropmate/8.png" alt="Dropmate 08">
+            </div>
+          </div>
         </div>
 
-        <!-- 이전/다음 프로젝트 -->
+        <!-- ③ Prototype & Detail 이미지 섹션 -->
+        <section class="prototype-section fade-in">
+          <div class="prototype-grid">
+            <div class="prototype-item">
+              <img src="../02-WORK-DETAIL/Dropmate/9.png" alt="Dropmate Detail 09">
+            </div>
+          </div>
+        </section>
+
+        <!-- 이전/다음 프로젝트 네비게이션 -->
         <nav class="project-nav">
-          <a href="jin.html">← Prev</a>
+          <a href="siseon.html">← Prev</a>
           <a href="../work.html" class="project-nav__back">All Works</a>
           <a href="grip.html">Next →</a>
         </nav>
