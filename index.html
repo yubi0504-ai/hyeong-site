@@ -7,138 +7,130 @@
   <meta name="description" content="hyeong™ — Design Studio">
   <link rel="stylesheet" href="css/style.css">
   <style>
-    /* 메인 인덱스: 글씨를 최소화하고 작품 비주얼에 몰입하는 미니멀 쇼케이스 */
-    .home-main {
-      padding-top: calc(var(--header-h) + 20px);
-      padding-bottom: 80px;
-      width: 100%;
-    }
-
-    .home-showcase-container {
-      width: 100%;
-      padding: 0 var(--pad);
-      display: flex;
-      flex-direction: column;
-      gap: 36px;
-    }
-
-    /* 상단 대형 비디오 히어로 (Grip 시네마틱) */
-    .home-hero-media {
-      width: 100%;
-      height: 75vh;
-      min-height: 480px;
-      max-height: 800px;
-      position: relative;
-      overflow: hidden;
-      background: #000000;
-      display: block;
-      text-decoration: none;
-    }
-
-    .home-hero-media video {
-      width: 100%;
+    /* ===================================================
+       1번 옵션: 풀스크린 시네마틱 릴 (Full-screen Cinematic Reel)
+       - 불필요한 텍스트 배제, 화면 전체(100vh)를 채우는 영상 중심
+       - 추후 video 파일 경로만 교체하면 바로 변경 가능
+       =================================================== */
+    html, body {
       height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+      overflow: hidden; /* 풀스크린 뷰포트 고정 */
+      background: #000000;
     }
 
-    .home-hero-media:hover video {
-      transform: scale(1.02);
-      opacity: 0.92;
+    /* 메인 인덱스에서는 헤더를 시네마틱 오버레이 형태로 투명 처리 */
+    .site-header {
+      background: transparent !important;
+      transition: opacity 0.3s ease;
     }
 
-    .home-hero-badge {
-      position: absolute;
-      bottom: 24px;
-      left: 24px;
-      color: #ffffff;
-      font-size: 13.5px;
-      font-weight: 700;
-      letter-spacing: -0.2px;
+    /* 배경이 어두운 영상 위에서 로고 및 내비게이션 텍스트가 반전/선명하게 보이도록 mix-blend-mode 적용 */
+    .site-header .header-inner {
+      mix-blend-mode: difference;
+    }
+
+    .site-header .logo img {
+      filter: invert(1); /* 블랙 로고를 화이트로 반전 */
+    }
+
+    .main-nav a {
+      color: #ffffff !important;
+    }
+
+    .main-nav a.active {
+      color: #ffffff !important;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .menu-toggle span {
+      background: #ffffff !important;
+    }
+
+    /* 풀스크린 비디오 릴 래퍼 */
+    .cinema-reel-wrapper {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: #050505;
       display: flex;
       align-items: center;
-      gap: 8px;
-      mix-blend-mode: difference;
+      justify-content: center;
+    }
+
+    .cinema-reel-video {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      min-width: 100%;
+      min-height: 100%;
+      width: auto;
+      height: auto;
+      transform: translate(-50%, -50%);
+      object-fit: cover;
       pointer-events: none;
     }
 
-    /* 하단 핵심 작품 3열 미니멀 그리드 */
-    .home-works-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
+    /* 화면 하단 미니멀 컨트롤 / 진입 바 */
+    .cinema-reel-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
       width: 100%;
-    }
-
-    .home-work-item {
-      display: block;
-      text-decoration: none;
-      color: #000000;
-      position: relative;
-    }
-
-    .home-work-item__thumb {
-      width: 100%;
-      aspect-ratio: 4 / 5;
-      overflow: hidden;
-      background: #eaeaea;
-      position: relative;
-      margin-bottom: 10px;
-    }
-
-    .home-work-item__thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .home-work-item:hover .home-work-item__thumb img {
-      transform: scale(1.03);
-    }
-
-    .home-work-item__info {
+      padding: 0 var(--pad) 32px;
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
+      align-items: flex-end;
+      z-index: 10;
+      mix-blend-mode: difference;
+      pointer-events: auto;
     }
 
-    .home-work-title {
-      font-size: 14px;
+    .cinema-reel-sound-btn {
+      background: none;
+      border: none;
+      color: #ffffff;
+      font-family: var(--font);
+      font-size: 12.5px;
+      font-weight: 700;
+      letter-spacing: -0.1px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0;
+      opacity: 0.85;
+      transition: opacity 0.2s ease;
+    }
+
+    .cinema-reel-sound-btn:hover {
+      opacity: 1;
+    }
+
+    .cinema-reel-enter {
+      color: #ffffff;
+      font-size: 13px;
       font-weight: 700;
       letter-spacing: -0.2px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      opacity: 0.85;
+      transition: opacity 0.2s ease, transform 0.2s ease;
     }
 
-    .home-work-arrow {
-      font-size: 12px;
-      font-weight: 700;
-      opacity: 0.5;
-      transition: transform 0.2s ease, opacity 0.2s ease;
-    }
-
-    .home-work-item:hover .home-work-arrow {
+    .cinema-reel-enter:hover {
       opacity: 1;
-      transform: translate(2px, -2px);
-    }
-
-    /* 반응형 */
-    @media (max-width: 900px) {
-      .home-hero-media {
-        height: 55vh;
-        min-height: 360px;
-      }
-      .home-works-grid {
-        grid-template-columns: 1fr;
-        gap: 32px;
-      }
+      transform: translateX(3px);
     }
   </style>
 </head>
 <body>
 
-  <!-- 헤더 -->
+  <!-- 헤더 (투명 오버레이 + 반전 모드) -->
   <header class="site-header">
     <div class="header-inner">
       <a href="index.html" class="logo">
@@ -156,71 +148,48 @@
     </div>
   </header>
 
-  <!-- 메인 본문: 순수 비주얼 쇼케이스 -->
-  <main class="home-main">
-    <div class="home-showcase-container">
+  <!-- 풀스크린 시네마틱 릴 영역 -->
+  <!-- ※ 추후 비디오 변경 시: video 태그의 src 경로만 원하시는 파일로 교체하시면 됩니다 -->
+  <main class="cinema-reel-wrapper">
+    <video 
+      id="heroReelVideo"
+      class="cinema-reel-video" 
+      src="video/grip-video.mp4" 
+      autoplay 
+      muted 
+      loop 
+      playsinline>
+    </video>
 
-      <!-- ① 메인 풀와이드 비디오 (Grip 동작 모션) -->
-      <a href="works/grip.html" class="home-hero-media">
-        <video src="video/grip-video.mp4" autoplay muted loop playsinline></video>
-        <div class="home-hero-badge">
-          <span>Grip</span>
-          <span>↗</span>
-        </div>
+    <!-- 하단 미니멀 오버레이 (소리 켜기/끄기 & Work 전체 보기 링크) -->
+    <div class="cinema-reel-footer">
+      <button type="button" class="cinema-reel-sound-btn" id="soundToggleBtn">
+        Sound [Off]
+      </button>
+
+      <a href="work.html" class="cinema-reel-enter">
+        Explore Work →
       </a>
-
-      <!-- ② 대표 작품 미니멀 비주얼 3열 그리드 -->
-      <div class="home-works-grid">
-
-        <!-- 작품 1: Dropmate -->
-        <a href="works/dropmate.html" class="home-work-item">
-          <div class="home-work-item__thumb">
-            <img src="01-WORK-COVERS/Dropmate-new.png" alt="Dropmate">
-          </div>
-          <div class="home-work-item__info">
-            <span class="home-work-title">Dropmate</span>
-            <span class="home-work-arrow">↗</span>
-          </div>
-        </a>
-
-        <!-- 작품 2: Jjindobaegi -->
-        <a href="works/jin.html" class="home-work-item">
-          <div class="home-work-item__thumb">
-            <img src="01-WORK-COVERS/Jin.png" alt="Jjindobaegi">
-          </div>
-          <div class="home-work-item__info">
-            <span class="home-work-title">Jjindobaegi</span>
-            <span class="home-work-arrow">↗</span>
-          </div>
-        </a>
-
-        <!-- 작품 3: siseon -->
-        <a href="works/siseon.html" class="home-work-item">
-          <div class="home-work-item__thumb">
-            <img src="01-WORK-COVERS/siseon.png" alt="siseon">
-          </div>
-          <div class="home-work-item__info">
-            <span class="home-work-title">siseon</span>
-            <span class="home-work-arrow">↗</span>
-          </div>
-        </a>
-
-      </div>
-
     </div>
   </main>
 
-  <!-- 푸터 -->
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <p class="footer-copyright">© 2024 hyeong™ All Rights Reserved.</p>
-      <div class="footer-links">
-        <a href="https://www.instagram.com/hyeong2_studio?utm_source=ig_web_button_share_sheet&stkn=ZDNlZDc0MzIxNw" target="_blank" rel="noopener">Instagram</a>
-        <a href="mailto:hyeongdesign@gmail.com">Email</a>
-      </div>
-    </div>
-  </footer>
-
   <script src="js/main.js"></script>
+  <script>
+    // 오디오 토글 제어 (사용자가 소리를 켜서 감상할 수 있도록 지원)
+    const video = document.getElementById('heroReelVideo');
+    const soundBtn = document.getElementById('soundToggleBtn');
+
+    if (video && soundBtn) {
+      soundBtn.addEventListener('click', () => {
+        if (video.muted) {
+          video.muted = false;
+          soundBtn.textContent = 'Sound [On]';
+        } else {
+          video.muted = true;
+          soundBtn.textContent = 'Sound [Off]';
+        }
+      });
+    }
+  </script>
 </body>
 </html>
