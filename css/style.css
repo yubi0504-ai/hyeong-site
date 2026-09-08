@@ -374,6 +374,20 @@ ul, ol { list-style: none; }
   object-fit: cover;
 }
 
+/* 꽉 찬 이미지 블록 (여백 없이 가득 채움) */
+.story-block--full {
+  padding: 0;
+  overflow: hidden;
+}
+
+.story-block--full img {
+  width: 100%;
+  max-width: 100%;
+  max-height: none;
+  height: auto;
+  display: block;
+}
+
 /* 2열 분할 세로형 배경 카드 그리드 (4, 5, 6, 7번 전용) */
 .story-grid-2col {
   display: grid;
