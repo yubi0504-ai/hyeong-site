@@ -8,129 +8,147 @@
   <link rel="stylesheet" href="css/style.css">
   <style>
     /* ===================================================
-       1번 옵션: 풀스크린 시네마틱 릴 (Full-screen Cinematic Reel)
-       - 불필요한 텍스트 배제, 화면 전체(100vh)를 채우는 영상 중심
-       - 추후 video 파일 경로만 교체하면 바로 변경 가능
+       hyeong™ 로고 중심 마우스 반응형 인터랙티브 메인
+       - 불필요한 글씨 완전 배제
+       - 마우스 이동에 반응하는 3D 키네틱 틸트 & 마그네틱 플로팅
+       - 마우스 호버에 유기적으로 감응하는 스튜디오 비주얼
        =================================================== */
     html, body {
       height: 100%;
-      overflow: hidden; /* 풀스크린 뷰포트 고정 */
-      background: #000000;
+      overflow: hidden;
+      background: var(--color-bg);
+      user-select: none;
     }
 
-    /* 메인 인덱스에서는 헤더를 시네마틱 오버레이 형태로 투명 처리 */
-    .site-header {
-      background: transparent !important;
-      transition: opacity 0.3s ease;
-    }
-
-    /* 배경이 어두운 영상 위에서 로고 및 내비게이션 텍스트가 반전/선명하게 보이도록 mix-blend-mode 적용 */
-    .site-header .header-inner {
-      mix-blend-mode: difference;
-    }
-
-    .site-header .logo img {
-      filter: invert(1); /* 블랙 로고를 화이트로 반전 */
-    }
-
-    .main-nav a {
-      color: #ffffff !important;
-    }
-
-    .main-nav a.active {
-      color: #ffffff !important;
-      text-decoration: underline;
-      text-underline-offset: 4px;
-    }
-
-    .menu-toggle span {
-      background: #ffffff !important;
-    }
-
-    /* 풀스크린 비디오 릴 래퍼 */
-    .cinema-reel-wrapper {
+    /* 메인 캔버스 무대 */
+    .logo-stage {
       position: fixed;
       inset: 0;
       width: 100vw;
       height: 100vh;
-      overflow: hidden;
-      background: #050505;
       display: flex;
       align-items: center;
       justify-content: center;
+      perspective: 1200px;
+      cursor: default;
     }
 
-    .cinema-reel-video {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      min-width: 100%;
-      min-height: 100%;
-      width: auto;
-      height: auto;
-      transform: translate(-50%, -50%);
-      object-fit: cover;
-      pointer-events: none;
-    }
-
-    /* 화면 하단 미니멀 컨트롤 / 진입 바 */
-    .cinema-reel-footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      padding: 0 var(--pad) 32px;
+    /* 마우스 이동에 따라 부드럽게 틸트되는 3D 래퍼 */
+    .logo-motion-box {
+      position: relative;
       display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      z-index: 10;
-      mix-blend-mode: difference;
-      pointer-events: auto;
-    }
-
-    .cinema-reel-sound-btn {
-      background: none;
-      border: none;
-      color: #ffffff;
-      font-family: var(--font);
-      font-size: 12.5px;
-      font-weight: 700;
-      letter-spacing: -0.1px;
-      cursor: pointer;
-      display: inline-flex;
+      flex-direction: column;
       align-items: center;
-      gap: 6px;
-      padding: 0;
-      opacity: 0.85;
-      transition: opacity 0.2s ease;
+      justify-content: center;
+      transform-style: preserve-3d;
+      will-change: transform;
+      transition: transform 0.15s cubic-bezier(0.2, 0, 0.2, 1);
     }
 
-    .cinema-reel-sound-btn:hover {
-      opacity: 1;
+    /* 중심 대형 로고 */
+    .hero-big-logo {
+      width: clamp(320px, 46vw, 760px);
+      height: auto;
+      display: block;
+      pointer-events: auto;
+      cursor: pointer;
+      transform: translateZ(40px);
+      transition: filter 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .cinema-reel-enter {
-      color: #ffffff;
+    .hero-big-logo:hover {
+      transform: translateZ(60px) scale(1.02);
+      filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.08));
+    }
+
+    /* 마우스 커서를 따라 부드럽게 주변에 맴도는 스튜디오 작품 앰비언트 카드들 */
+    .ambient-card {
+      position: absolute;
+      pointer-events: none;
+      border-radius: 2px;
+      overflow: hidden;
+      opacity: 0;
+      transform-style: preserve-3d;
+      transition: opacity 0.4s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
+      background: #e0e0e0;
+    }
+
+    .ambient-card img,
+    .ambient-card video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* 작품 1 (좌측 상단 부유) */
+    .ambient-card--1 {
+      width: clamp(140px, 15vw, 220px);
+      aspect-ratio: 4 / 5;
+      top: -30%;
+      left: -18%;
+      transform: translateZ(20px);
+    }
+
+    /* 작품 2 (우측 하단 부유) */
+    .ambient-card--2 {
+      width: clamp(160px, 18vw, 260px);
+      aspect-ratio: 16 / 10;
+      bottom: -32%;
+      right: -16%;
+      transform: translateZ(30px);
+    }
+
+    /* 작품 3 (우측 상단 비디오 부유) */
+    .ambient-card--3 {
+      width: clamp(130px, 14vw, 200px);
+      aspect-ratio: 1;
+      top: -24%;
+      right: -14%;
+      transform: translateZ(50px);
+    }
+
+    /* 로고 영역 활성화 시 스튜디오 비주얼이 자연스럽게 투영됨 */
+    .logo-stage.is-active .ambient-card {
+      opacity: 0.92;
+    }
+
+    /* 하단 미니멀 진입 단서 */
+    .stage-bottom-hint {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
       font-size: 13px;
       font-weight: 700;
-      letter-spacing: -0.2px;
-      text-decoration: none;
-      display: inline-flex;
+      letter-spacing: -0.1px;
+      color: #000000;
+      display: flex;
       align-items: center;
-      gap: 4px;
-      opacity: 0.85;
-      transition: opacity 0.2s ease, transform 0.2s ease;
+      gap: 6px;
+      opacity: 0.35;
+      transition: opacity 0.2s ease;
+      text-decoration: none;
     }
 
-    .cinema-reel-enter:hover {
+    .stage-bottom-hint:hover {
       opacity: 1;
-      transform: translateX(3px);
+    }
+
+    @media (max-width: 768px) {
+      .hero-big-logo {
+        width: 82vw;
+      }
+      .ambient-card {
+        display: none; /* 모바일에서는 깔끔하게 로고 틸트 모션만 집중 */
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- 헤더 (투명 오버레이 + 반전 모드) -->
+  <!-- 헤더 -->
   <header class="site-header">
     <div class="header-inner">
       <a href="index.html" class="logo">
@@ -148,48 +166,112 @@
     </div>
   </header>
 
-  <!-- 풀스크린 시네마틱 릴 영역 -->
-  <!-- ※ 추후 비디오 변경 시: video 태그의 src 경로만 원하시는 파일로 교체하시면 됩니다 -->
-  <main class="cinema-reel-wrapper">
-    <video 
-      id="heroReelVideo"
-      class="cinema-reel-video" 
-      src="video/grip-video.mp4" 
-      autoplay 
-      muted 
-      loop 
-      playsinline>
-    </video>
+  <!-- 마우스 반응형 로고 스테이지 -->
+  <main class="logo-stage" id="logoStage">
+    
+    <div class="logo-motion-box" id="logoMotionBox">
 
-    <!-- 하단 미니멀 오버레이 (소리 켜기/끄기 & Work 전체 보기 링크) -->
-    <div class="cinema-reel-footer">
-      <button type="button" class="cinema-reel-sound-btn" id="soundToggleBtn">
-        Sound [Off]
-      </button>
+      <!-- 주변에 유기적으로 떠오르는 앰비언트 작품 컷들 (글씨 없이 시각적 감도만 전달) -->
+      <div class="ambient-card ambient-card--1" id="ambCard1">
+        <img src="01-WORK-COVERS/Dropmate-new.png" alt="Dropmate">
+      </div>
 
-      <a href="work.html" class="cinema-reel-enter">
-        Explore Work →
+      <div class="ambient-card ambient-card--2" id="ambCard2">
+        <img src="01-WORK-COVERS/Jin.png" alt="Jjindobaegi">
+      </div>
+
+      <div class="ambient-card ambient-card--3" id="ambCard3">
+        <video src="video/grip-video.mp4" autoplay muted loop playsinline></video>
+      </div>
+
+      <!-- 클릭 시 Studio 페이지로 넘어가는 중앙 반응형 로고 -->
+      <a href="about.html" title="Enter Studio">
+        <img src="LOGO.png" alt="hyeong™" class="hero-big-logo" id="heroBigLogo">
       </a>
+
     </div>
+
+    <!-- 하단 은은한 힌트 -->
+    <a href="about.html" class="stage-bottom-hint">
+      Click to Enter Studio ↗
+    </a>
+
   </main>
 
   <script src="js/main.js"></script>
   <script>
-    // 오디오 토글 제어 (사용자가 소리를 켜서 감상할 수 있도록 지원)
-    const video = document.getElementById('heroReelVideo');
-    const soundBtn = document.getElementById('soundToggleBtn');
+    /* ── hyeong™ 로고 마우스 반응형 물리/3D 틸트 인터랙션 ── */
+    const stage = document.getElementById('logoStage');
+    const box = document.getElementById('logoMotionBox');
+    const card1 = document.getElementById('ambCard1');
+    const card2 = document.getElementById('ambCard2');
+    const card3 = document.getElementById('ambCard3');
 
-    if (video && soundBtn) {
-      soundBtn.addEventListener('click', () => {
-        if (video.muted) {
-          video.muted = false;
-          soundBtn.textContent = 'Sound [On]';
-        } else {
-          video.muted = true;
-          soundBtn.textContent = 'Sound [Off]';
-        }
-      });
+    let mouseX = 0;
+    let mouseY = 0;
+    let targetRotX = 0;
+    let targetRotY = 0;
+    let targetTransX = 0;
+    let targetTransY = 0;
+
+    let currentRotX = 0;
+    let currentRotY = 0;
+    let currentTransX = 0;
+    let currentTransY = 0;
+
+    // 마우스 좌표 추적 (화면 중앙 기준 -1 ~ +1 정규화)
+    window.addEventListener('mousemove', (e) => {
+      const { innerWidth: w, innerHeight: h } = window;
+      const normX = (e.clientX / w - 0.5) * 2; // -1 ~ 1
+      const normY = (e.clientY / h - 0.5) * 2; // -1 ~ 1
+
+      // 각도 및 이동값 계산 (인터랙티브 3D 틸트 각도)
+      targetRotY = normX * 16;  // 좌우 회전 (deg)
+      targetRotX = -normY * 16; // 상하 회전 (deg)
+      targetTransX = normX * 24; // 좌우 이동 (px)
+      targetTransY = normY * 20; // 상하 이동 (px)
+
+      // 마우스가 움직이기 시작하면 주변 작품들이 기분 좋게 투영됨
+      stage.classList.add('is-active');
+    });
+
+    window.addEventListener('mouseleave', () => {
+      targetRotX = 0;
+      targetRotY = 0;
+      targetTransX = 0;
+      targetTransY = 0;
+      stage.classList.remove('is-active');
+    });
+
+    // RAF를 이용한 극도로 부드러운 감속 추종 (Spring Easing)
+    function render() {
+      currentRotX += (targetRotX - currentRotX) * 0.08;
+      currentRotY += (targetRotY - currentRotY) * 0.08;
+      currentTransX += (targetTransX - currentTransX) * 0.08;
+      currentTransY += (targetTransY - currentTransY) * 0.08;
+
+      // 중앙 메인 박스 변형
+      box.style.transform = `
+        rotateX(${currentRotX.toFixed(2)}deg) 
+        rotateY(${currentRotY.toFixed(2)}deg) 
+        translate3d(${currentTransX.toFixed(2)}px, ${currentTransY.toFixed(2)}px, 0)
+      `;
+
+      // 주변 앰비언트 카드들의 깊이감 있는 패럴랙스(Parallax) 반응
+      if (card1) {
+        card1.style.transform = `translate3d(${-currentTransX * 0.8}px, ${-currentTransY * 0.8}px, 50px)`;
+      }
+      if (card2) {
+        card2.style.transform = `translate3d(${-currentTransX * 1.2}px, ${-currentTransY * 1.2}px, 70px)`;
+      }
+      if (card3) {
+        card3.style.transform = `translate3d(${-currentTransX * 0.6}px, ${-currentTransY * 0.6}px, 90px)`;
+      }
+
+      requestAnimationFrame(render);
     }
+
+    requestAnimationFrame(render);
   </script>
 </body>
 </html>
