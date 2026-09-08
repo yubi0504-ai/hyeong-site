@@ -414,6 +414,11 @@ ul, ol { list-style: none; }
   display: block;
 }
 
+/* 1:1 정사각형 2열 카드 */
+.story-card--square {
+  aspect-ratio: 1 / 1;
+}
+
 @media (max-width: 768px) {
   .story-grid-2col {
     grid-template-columns: 1fr;
