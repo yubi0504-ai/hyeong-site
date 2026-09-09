@@ -9,12 +9,14 @@
   <style>
     /* ===================================================
        hyeong™ 메인 커버 슬라이드쇼
-       - Real Cover 이미지 6장을 전체 화면에 채우고 3초마다 부드럽게 전환
+       - Real Cover 이미지가 잘리지 않고 중앙에 집중감 있게 배치
+       - 5초마다 부드럽고 우아하게 전환
+       - 인위적인 상하 검정 페이드 제거
        =================================================== */
     html, body {
       height: 100%;
       overflow: hidden;
-      background: #000000;
+      background: #ffffff;
       user-select: none;
     }
 
@@ -26,18 +28,26 @@
       height: 100vh;
       overflow: hidden;
       z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
     }
 
-    /* 슬라이드 아이템들 */
+    /* 슬라이드 아이템들 (가운데 배치 & 잘림 방지) */
     .slide-item {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(60px, 8vh, 100px) clamp(24px, 6vw, 80px);
       opacity: 0;
       visibility: hidden;
-      transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 6s cubic-bezier(0.1, 0, 0.2, 1);
-      transform: scale(1.04);
+      transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 5s cubic-bezier(0.1, 0, 0.2, 1);
+      transform: scale(0.96);
       will-change: opacity, transform;
     }
 
@@ -48,42 +58,39 @@
       z-index: 2;
     }
 
+    /* 이미지가 잘리지 않고 단정하고 작게 보이도록 contain 처리 */
     .slide-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+      max-width: 82%;
+      max-height: 72vh;
+      width: auto;
+      height: auto;
+      object-fit: contain;
       object-position: center;
       display: block;
-    }
-
-    /* 은은한 비네팅 오버레이 (헤더 가독성 및 세련된 톤 확보) */
-    .slideshow-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0) 25%, rgba(0,0,0,0) 75%, rgba(0,0,0,0.35) 100%);
+      margin: auto;
       pointer-events: none;
-      z-index: 3;
+      filter: drop-shadow(0 15px 35px rgba(0, 0, 0, 0.04));
     }
 
-    /* 인덱스 페이지 헤더 투명화 및 화이트 대비 */
+    /* 상하 검정 페이드 제거: 깔끔한 투명 헤더 및 기존 사이트 톤 유지 */
     .site-header {
       background: transparent !important;
     }
 
     .logo img {
-      filter: brightness(0) invert(1);
+      filter: none; /* 오리지널 블랙 로고 유지 */
     }
 
     .main-nav a {
-      color: #ffffff !important;
+      color: #000000 !important; /* 순수 블랙 폰트 */
     }
 
     .main-nav a:hover {
-      opacity: 0.7;
+      opacity: 0.5;
     }
 
     .menu-toggle span {
-      background: #ffffff !important;
+      background: #000000 !important;
     }
 
     /* 하단 미니멀 인디케이터 및 컨트롤 */
@@ -99,7 +106,7 @@
       font-size: 12.5px;
       font-weight: 700;
       letter-spacing: -0.1px;
-      color: #ffffff;
+      color: #000000;
       z-index: 20;
       pointer-events: auto;
     }
@@ -119,9 +126,9 @@
     }
 
     .slide-bar {
-      width: 24px;
+      width: 28px;
       height: 2px;
-      background: rgba(255, 255, 255, 0.3);
+      background: rgba(0, 0, 0, 0.12);
       border-radius: 1px;
       overflow: hidden;
       position: relative;
@@ -134,12 +141,12 @@
       left: 0;
       height: 100%;
       width: 0%;
-      background: #ffffff;
+      background: #000000;
     }
 
     .slide-bar.is-active .slide-bar-fill {
       width: 100%;
-      transition: width 3s linear;
+      transition: width 5s linear;
     }
 
     .slide-bar.is-passed .slide-bar-fill {
@@ -147,7 +154,7 @@
     }
 
     .slide-enter-link {
-      color: #ffffff;
+      color: #000000;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
@@ -156,7 +163,14 @@
     }
 
     .slide-enter-link:hover {
-      opacity: 0.6;
+      opacity: 0.5;
+    }
+
+    @media (max-width: 768px) {
+      .slide-item img {
+        max-width: 90%;
+        max-height: 65vh;
+      }
     }
   </style>
 </head>
@@ -182,8 +196,6 @@
 
   <!-- 메인 Real Cover 슬라이드쇼 스테이지 -->
   <main class="hero-slideshow-wrap" id="slideshowWrap">
-    
-    <div class="slideshow-overlay"></div>
 
     <!-- Real Cover 이미지 6장 -->
     <div class="slide-item is-active" data-index="0">
@@ -227,13 +239,13 @@
 
   <script src="js/main.js"></script>
   <script>
-    /* ── Real Cover 3초 자동 전환 슬라이드쇼 스크립트 ── */
+    /* ── Real Cover 5초 자동 전환 슬라이드쇼 스크립트 ── */
     const slides = document.querySelectorAll('.slide-item');
     const bars = document.querySelectorAll('.slide-bar');
     const currentNumEl = document.getElementById('currentSlideNum');
     const totalSlides = slides.length;
     let currentIndex = 0;
-    const intervalDuration = 3000; // 3초 (3000ms)
+    const intervalDuration = 5000; // 5초 (5000ms)
     let slideTimer = null;
 
     function showSlide(index) {
