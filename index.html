@@ -153,7 +153,7 @@
 
     .slide-bar.is-active .slide-bar-fill {
       width: 100%;
-      transition: width 5s linear;
+      transition: width 3s linear;
     }
 
     .slide-bar.is-passed .slide-bar-fill {
@@ -246,13 +246,13 @@
 
   <script src="js/main.js"></script>
   <script>
-    /* ── Real Cover 5초 자동 전환 슬라이드쇼 스크립트 ── */
+    /* ── Real Cover 3초 자동 전환 슬라이드쇼 스크립트 ── */
     const slides = document.querySelectorAll('.slide-item');
     const bars = document.querySelectorAll('.slide-bar');
     const currentNumEl = document.getElementById('currentSlideNum');
     const totalSlides = slides.length;
     let currentIndex = 0;
-    const intervalDuration = 5000; // 5초 (5000ms)
+    const intervalDuration = 3000; // 3초 (3000ms)
     let slideTimer = null;
 
     function showSlide(index) {
