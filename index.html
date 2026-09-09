@@ -8,107 +8,86 @@
   <link rel="stylesheet" href="css/style.css">
   <style>
     /* ===================================================
-       해외 하이엔드 스튜디오 감성: 
-       Interactive Kinetic Logo + Cursor Image Trail Archive
-       - 글씨 없이 오직 로고와 마우스 커서 궤적에 반응하는 스튜디오 작품들
+       hyeong™ 메인 커버 슬라이드쇼
+       - Real Cover 이미지 6장을 전체 화면에 채우고 3초마다 부드럽게 전환
        =================================================== */
     html, body {
       height: 100%;
       overflow: hidden;
-      background: #ececec;
-      cursor: crosshair; /* 감각적인 미니멀 십자 커서 */
+      background: #000000;
       user-select: none;
     }
 
-    /* 메인 캔버스 스테이지 */
-    .hero-interactive-stage {
+    /* 메인 커버 컨테이너 */
+    .hero-slideshow-wrap {
       position: fixed;
       inset: 0;
       width: 100vw;
       height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      perspective: 1400px;
       overflow: hidden;
+      z-index: 1;
+    }
+
+    /* 슬라이드 아이템들 */
+    .slide-item {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 6s cubic-bezier(0.1, 0, 0.2, 1);
+      transform: scale(1.04);
+      will-change: opacity, transform;
+    }
+
+    .slide-item.is-active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1);
       z-index: 2;
     }
 
-    /* 마우스 커서 반응 3D 키네틱 로고 컨테이너 */
-    .kinetic-logo-wrap {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      transform-style: preserve-3d;
-      will-change: transform;
-      z-index: 10;
-      pointer-events: auto;
-    }
-
-    /* 중앙 대형 시그니처 로고 */
-    .kinetic-logo {
-      width: clamp(340px, 50vw, 840px);
-      height: auto;
-      display: block;
-      cursor: pointer;
-      mix-blend-mode: multiply;
-      transition: filter 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .kinetic-logo-wrap:hover .kinetic-logo {
-      filter: drop-shadow(0 30px 45px rgba(0, 0, 0, 0.15));
-      transform: scale(1.025);
-    }
-
-    /* 마우스 궤적을 따라 피어나는 이미지 트레일(Image Trail) 컨테이너 */
-    .trail-canvas {
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 5;
-      overflow: hidden;
-    }
-
-    .trail-item {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: clamp(170px, 18vw, 290px);
-      aspect-ratio: 4 / 5;
-      pointer-events: none;
-      border-radius: 1px;
-      overflow: hidden;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.16);
-      background: #dfdfdf;
-      transform: translate(-50%, -50%) scale(0.6) rotate(0deg);
-      opacity: 0;
-      will-change: transform, opacity;
-      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .trail-item.is-visible {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1) rotate(var(--rot, 0deg));
-    }
-
-    .trail-item.is-fading {
-      opacity: 0;
-      transform: translate(-50%, -50%) scale(1.06) rotate(var(--rot, 0deg));
-    }
-
-    .trail-item img {
+    .slide-item img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      object-position: center;
       display: block;
     }
 
-    /* 하단 미니멀 진입 태그 */
-    .stage-bottom-info {
+    /* 은은한 비네팅 오버레이 (헤더 가독성 및 세련된 톤 확보) */
+    .slideshow-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0) 25%, rgba(0,0,0,0) 75%, rgba(0,0,0,0.35) 100%);
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    /* 인덱스 페이지 헤더 투명화 및 화이트 대비 */
+    .site-header {
+      background: transparent !important;
+    }
+
+    .logo img {
+      filter: brightness(0) invert(1);
+    }
+
+    .main-nav a {
+      color: #ffffff !important;
+    }
+
+    .main-nav a:hover {
+      opacity: 0.7;
+    }
+
+    .menu-toggle span {
+      background: #ffffff !important;
+    }
+
+    /* 하단 미니멀 인디케이터 및 컨트롤 */
+    .slide-footer-info {
       position: fixed;
       bottom: 28px;
       left: 0;
@@ -120,59 +99,70 @@
       font-size: 12.5px;
       font-weight: 700;
       letter-spacing: -0.1px;
-      color: #000000;
+      color: #ffffff;
       z-index: 20;
       pointer-events: auto;
     }
 
-    .studio-status-dot {
+    .slide-counter {
       display: inline-flex;
       align-items: center;
-      gap: 7px;
+      gap: 8px;
+      letter-spacing: 0.5px;
+      font-variant-numeric: tabular-nums;
     }
 
-    .studio-status-dot::before {
-      content: '';
-      width: 6px;
-      height: 6px;
-      background: #0033ff;
-      border-radius: 50%;
-      display: inline-block;
-      animation: pulseDot 2s infinite ease-in-out;
+    .slide-bars {
+      display: flex;
+      gap: 6px;
+      align-items: center;
     }
 
-    @keyframes pulseDot {
-      0%, 100% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.6); opacity: 0.4; }
+    .slide-bar {
+      width: 24px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 1px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
     }
 
-    .stage-enter-link {
-      color: #000000;
+    .slide-bar-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background: #ffffff;
+    }
+
+    .slide-bar.is-active .slide-bar-fill {
+      width: 100%;
+      transition: width 3s linear;
+    }
+
+    .slide-bar.is-passed .slide-bar-fill {
+      width: 100%;
+    }
+
+    .slide-enter-link {
+      color: #ffffff;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
-      gap: 4px;
-      transition: opacity 0.2s ease, transform 0.2s ease;
+      gap: 6px;
+      transition: opacity 0.2s ease;
     }
 
-    .stage-enter-link:hover {
-      opacity: 0.5;
-      transform: translateX(3px);
-    }
-
-    @media (max-width: 768px) {
-      .kinetic-logo {
-        width: 84vw;
-      }
-      .trail-item {
-        width: 150px;
-      }
+    .slide-enter-link:hover {
+      opacity: 0.6;
     }
   </style>
 </head>
 <body>
 
-  <!-- 헤더 -->
+  <!-- 헤더 (투명) -->
   <header class="site-header">
     <div class="header-inner">
       <a href="index.html" class="logo">
@@ -190,148 +180,140 @@
     </div>
   </header>
 
-  <!-- 마우스 궤적 이미지 트레일 캔버스 -->
-  <div class="trail-canvas" id="trailCanvas"></div>
-
-  <!-- 마우스 반응형 로고 스테이지 -->
-  <main class="hero-interactive-stage" id="interactiveStage">
+  <!-- 메인 Real Cover 슬라이드쇼 스테이지 -->
+  <main class="hero-slideshow-wrap" id="slideshowWrap">
     
-    <div class="kinetic-logo-wrap" id="kineticLogoWrap">
-      <a href="about.html" title="Enter Studio">
-        <img src="LOGO.png" alt="hyeong™" class="kinetic-logo">
-      </a>
+    <div class="slideshow-overlay"></div>
+
+    <!-- Real Cover 이미지 6장 -->
+    <div class="slide-item is-active" data-index="0">
+      <img src="Real Cover/SITE/Frame 51.png" alt="hyeong™ Cover 01">
+    </div>
+    <div class="slide-item" data-index="1">
+      <img src="Real Cover/SITE/Frame 52.png" alt="hyeong™ Cover 02">
+    </div>
+    <div class="slide-item" data-index="2">
+      <img src="Real Cover/SITE/Frame 53.png" alt="hyeong™ Cover 03">
+    </div>
+    <div class="slide-item" data-index="3">
+      <img src="Real Cover/SITE/Frame 54.png" alt="hyeong™ Cover 04">
+    </div>
+    <div class="slide-item" data-index="4">
+      <img src="Real Cover/SITE/Frame 55.png" alt="hyeong™ Cover 05">
+    </div>
+    <div class="slide-item" data-index="5">
+      <img src="Real Cover/SITE/Frame 56.png" alt="hyeong™ Cover 06">
     </div>
 
-    <!-- 하단 미니멀 정보 -->
-    <div class="stage-bottom-info">
-      <span class="studio-status-dot">Industrial Design Studio</span>
-      <a href="about.html" class="stage-enter-link">Enter Studio →</a>
+    <!-- 하단 미니멀 슬라이드 정보 및 인디케이터 -->
+    <div class="slide-footer-info">
+      <div class="slide-counter">
+        <span id="currentSlideNum">01</span> / 06
+      </div>
+
+      <div class="slide-bars" id="slideBars">
+        <div class="slide-bar is-active"><div class="slide-bar-fill"></div></div>
+        <div class="slide-bar"><div class="slide-bar-fill"></div></div>
+        <div class="slide-bar"><div class="slide-bar-fill"></div></div>
+        <div class="slide-bar"><div class="slide-bar-fill"></div></div>
+        <div class="slide-bar"><div class="slide-bar-fill"></div></div>
+        <div class="slide-bar"><div class="slide-bar-fill"></div></div>
+      </div>
+
+      <a href="about.html" class="slide-enter-link">Enter Studio</a>
     </div>
 
   </main>
 
   <script src="js/main.js"></script>
   <script>
-    /* ── 해외 에이전시 스타일: 3D 키네틱 로고 & 인터랙티브 커서 이미지 트레일 ── */
-    const stage = document.getElementById('interactiveStage');
-    const logoWrap = document.getElementById('kineticLogoWrap');
-    const trailCanvas = document.getElementById('trailCanvas');
+    /* ── Real Cover 3초 자동 전환 슬라이드쇼 스크립트 ── */
+    const slides = document.querySelectorAll('.slide-item');
+    const bars = document.querySelectorAll('.slide-bar');
+    const currentNumEl = document.getElementById('currentSlideNum');
+    const totalSlides = slides.length;
+    let currentIndex = 0;
+    const intervalDuration = 3000; // 3초 (3000ms)
+    let slideTimer = null;
 
-    // 마우스가 이동할 때마다 궤적에 순차적으로 펼쳐질 스튜디오 대표작 비주얼 풀
-    const trailImages = [
-      '01-WORK-COVERS/Dropmate-new.png',
-      '01-WORK-COVERS/Grip-cover.png',
-      '01-WORK-COVERS/Jin.png',
-      '01-WORK-COVERS/siseon.png',
-      '01-WORK-COVERS/name.png',
-      '01-WORK-COVERS/gleam.png',
-      '00-PORTFOLIO_WEBSITE/cover-01.png',
-      '00-PORTFOLIO_WEBSITE/cover-06.png',
-      '00-PORTFOLIO_WEBSITE/new-01.png',
-      '00-PORTFOLIO_WEBSITE/cover-03.png'
-    ];
+    function showSlide(index) {
+      // 기존 슬라이드 비활성화
+      slides.forEach((slide, i) => {
+        slide.classList.remove('is-active');
+        if (i === index) {
+          slide.classList.add('is-active');
+        }
+      });
 
-    let currentImgIdx = 0;
-    let lastTrailX = 0;
-    let lastTrailY = 0;
-    const trailDistanceThreshold = 85; // 이미지가 생성되는 마우스 최소 이동 거리 (px)
+      // 바 인디케이터 상태 업데이트
+      bars.forEach((bar, i) => {
+        bar.classList.remove('is-active', 'is-passed');
+        const fill = bar.querySelector('.slide-bar-fill');
+        fill.style.transition = 'none';
+        fill.style.width = '0%';
+        
+        if (i < index) {
+          bar.classList.add('is-passed');
+          fill.style.width = '100%';
+        } else if (i === index) {
+          // 강제 리플로우 후 3초 애니메이션 시작
+          void bar.offsetWidth;
+          bar.classList.add('is-active');
+          fill.style.transition = `width ${intervalDuration}ms linear`;
+          fill.style.width = '100%';
+        }
+      });
 
-    // 3D 틸트 물리 변수
-    let targetRotX = 0;
-    let targetRotY = 0;
-    let targetTransX = 0;
-    let targetTransY = 0;
+      // 번호 텍스트 갱신 (01 ~ 06)
+      currentNumEl.textContent = String(index + 1).padStart(2, '0');
+      currentIndex = index;
+    }
 
-    let curRotX = 0;
-    let curRotY = 0;
-    let curTransX = 0;
-    let curTransY = 0;
+    function nextSlide() {
+      const nextIndex = (currentIndex + 1) % totalSlides;
+      showSlide(nextIndex);
+    }
 
-    // 마우스 이동 시 1) 3D 로고 틸트 각도 계산 + 2) 마우스 커서 위치에 이미지 트레일 생성
-    window.addEventListener('mousemove', (e) => {
-      const { clientX: x, clientY: y } = e;
-      const { innerWidth: w, innerHeight: h } = window;
+    function startAutoSlide() {
+      if (slideTimer) clearInterval(slideTimer);
+      // 첫 슬라이드 바 애니메이션 시작
+      showSlide(0);
+      slideTimer = setInterval(nextSlide, intervalDuration);
+    }
 
-      // 3D 로고 반응값
-      const normX = (x / w - 0.5) * 2;
-      const normY = (y / h - 0.5) * 2;
+    // 클릭 시 해당 슬라이드로 바로 이동
+    bars.forEach((bar, i) => {
+      bar.addEventListener('click', () => {
+        clearInterval(slideTimer);
+        showSlide(i);
+        slideTimer = setInterval(nextSlide, intervalDuration);
+      });
+    });
 
-      targetRotY = normX * 18;  // 좌우 회전 각도
-      targetRotX = -normY * 18; // 상하 회전 각도
-      targetTransX = normX * 28; // 좌우 이동거리
-      targetTransY = normY * 24; // 상하 이동거리
+    // 화면 클릭 시 다음 슬라이드로 넘어가는 직관적인 제스처 지원 (링크/바 제외)
+    document.getElementById('slideshowWrap').addEventListener('click', (e) => {
+      if (e.target.closest('.slide-bars') || e.target.closest('a') || e.target.closest('header')) return;
+      clearInterval(slideTimer);
+      nextSlide();
+      slideTimer = setInterval(nextSlide, intervalDuration);
+    });
 
-      // 마우스 이동 거리가 임계값을 넘으면 감각적인 작품 이미지 팝업
-      const dist = Math.hypot(x - lastTrailX, y - lastTrailY);
-      if (dist > trailDistanceThreshold) {
-        spawnTrailItem(x, y);
-        lastTrailX = x;
-        lastTrailY = y;
+    // 키보드 좌우 방향키로도 슬라이드 제어 가능
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        clearInterval(slideTimer);
+        nextSlide();
+        slideTimer = setInterval(nextSlide, intervalDuration);
+      } else if (e.key === 'ArrowLeft') {
+        clearInterval(slideTimer);
+        const prevIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+        showSlide(prevIndex);
+        slideTimer = setInterval(nextSlide, intervalDuration);
       }
     });
 
-    window.addEventListener('mouseleave', () => {
-      targetRotX = 0;
-      targetRotY = 0;
-      targetTransX = 0;
-      targetTransY = 0;
-    });
-
-    // 궤적에 이미지를 생성하고 자연스럽게 페이드아웃시키는 함수
-    function spawnTrailItem(x, y) {
-      const imgPath = trailImages[currentImgIdx];
-      currentImgIdx = (currentImgIdx + 1) % trailImages.length;
-
-      const item = document.createElement('div');
-      item.className = 'trail-item';
-      item.style.left = `${x}px`;
-      item.style.top = `${y}px`;
-
-      // 미세하고 자연스러운 랜덤 회전각 (-7도 ~ +7도)
-      const randomRot = (Math.random() - 0.5) * 14;
-      item.style.setProperty('--rot', `${randomRot}deg`);
-
-      const img = document.createElement('img');
-      img.src = imgPath;
-      img.alt = 'hyeong studio archive';
-      item.appendChild(img);
-
-      trailCanvas.appendChild(item);
-
-      // 다음 프레임에서 나타남
-      requestAnimationFrame(() => {
-        item.classList.add('is-visible');
-      });
-
-      // 일정 시간 후 부드럽게 페이드아웃 후 제거
-      setTimeout(() => {
-        item.classList.remove('is-visible');
-        item.classList.add('is-fading');
-        setTimeout(() => {
-          if (item.parentNode) {
-            item.parentNode.removeChild(item);
-          }
-        }, 700);
-      }, 650);
-    }
-
-    // RAF 부드러운 스프링 물리 렌더러
-    function renderLoop() {
-      curRotX += (targetRotX - curRotX) * 0.08;
-      curRotY += (targetRotY - curRotY) * 0.08;
-      curTransX += (targetTransX - curTransX) * 0.08;
-      curTransY += (targetTransY - curTransY) * 0.08;
-
-      logoWrap.style.transform = `
-        rotateX(${curRotX.toFixed(2)}deg) 
-        rotateY(${curRotY.toFixed(2)}deg) 
-        translate3d(${curTransX.toFixed(2)}px, ${curTransY.toFixed(2)}px, 40px)
-      `;
-
-      requestAnimationFrame(renderLoop);
-    }
-
-    requestAnimationFrame(renderLoop);
+    // 시작
+    startAutoSlide();
   </script>
 </body>
 </html>
