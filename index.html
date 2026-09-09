@@ -34,7 +34,7 @@
       background: #efefef;
     }
 
-    /* 슬라이드 아이템들 (눈부심 없는 크로스페이드: 이전 슬라이드 위에 새 슬라이드가 부드럽게 겹치며 전환) */
+    /* 슬라이드 아이템들 (깔끔하고 신속한 크로스페이드) */
     .slide-item {
       position: absolute;
       inset: 0;
@@ -47,15 +47,16 @@
       opacity: 0;
       visibility: hidden;
       z-index: 1;
-      transition: opacity 0.8s ease-in-out;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
       will-change: opacity;
     }
 
-    /* 직전 활성화 슬라이드 (바탕이 비치지 않게 유지) */
+    /* 직전 활성화 슬라이드: 새 슬라이드가 들어오는 동안 잔상 없이 신속히 퇴장 */
     .slide-item.is-previous {
-      opacity: 1;
+      opacity: 0;
       visibility: visible;
       z-index: 1;
+      transition: opacity 0.4s ease;
     }
 
     /* 현재 활성화 슬라이드 */
@@ -63,6 +64,7 @@
       opacity: 1;
       visibility: visible;
       z-index: 2;
+      transition: opacity 0.4s ease;
     }
 
     /* 이미지가 잘리지 않고 단정하고 작게 보이도록 contain 처리 */
@@ -298,12 +300,12 @@
       currentNumEl.textContent = String(index + 1).padStart(2, '0');
       currentIndex = index;
 
-      // 트랜지션 완료(800ms) 후 이전 슬라이드의 클래스 정리
+      // 트랜지션 완료(400ms) 후 이전 슬라이드의 클래스 정리
       setTimeout(() => {
         if (prevSlide && prevSlide !== slides[currentIndex]) {
           prevSlide.classList.remove('is-previous');
         }
-      }, 850);
+      }, 420);
     }
 
     function nextSlide() {
