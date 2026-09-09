@@ -636,129 +636,135 @@
   <script src="js/main.js"></script>
   <script>
     /* ── 이미지 스트립 자연스러운 자동 스크롤 & 마우스 호버 가속 & 무한 루프 ── */
-    const container = document.getElementById('galleryContainer');
-    const strip = document.getElementById('galleryStrip');
+    window.addEventListener('DOMContentLoaded', () => {
+      const container = document.getElementById('galleryContainer');
+      const strip = document.getElementById('galleryStrip');
+      if (!container || !strip) return;
 
-    // 이미지 스트립 복제 (자연스럽고 끊김 없는 무한 스크롤 구현)
-    const originalItems = Array.from(strip.children);
-    originalItems.forEach(item => {
-      const clone = item.cloneNode(true);
-      strip.appendChild(clone);
-    });
+      // 이미지 스트립 복제 (자연스럽고 끊김 없는 무한 스크롤 구현)
+      const originalItems = Array.from(strip.children);
+      originalItems.forEach(item => {
+        const clone = item.cloneNode(true);
+        strip.appendChild(clone);
+      });
 
-    let isDown = false;
-    let startX = 0;
-    let scrollLeftPos = 0;
-    let isHovered = false;
+      let isDown = false;
+      let startX = 0;
+      let scrollLeftPos = 0;
+      let isHovered = false;
 
-    // 기본 속도 및 호버 시 가속 속도 (px per frame, 부드러운 보간 적용)
-    // 마우스를 올리지 않아도 처음부터 눈에 띄게 스스로 자동 스크롤됩니다.
-    const baseSpeed = 2.2;      // 평상시 시원하고 기분 좋게 흘러가는 자동 속도
-    const fastSpeed = 6.5;      // 마우스를 올렸을 때 더욱 시원하게 가속되는 속도
-    let currentSpeed = baseSpeed;
-    let targetSpeed = baseSpeed;
+      // 기본 속도 및 호버 시 가속 속도 (px per frame, 부드러운 보간 적용)
+      const baseSpeed = 2.0;      // 평상시 시원하고 기분 좋게 흘러가는 자동 속도
+      const fastSpeed = 5.5;      // 마우스를 올렸을 때 더욱 시원하게 가속되는 속도
+      let currentSpeed = baseSpeed;
+      let targetSpeed = baseSpeed;
 
-    container.addEventListener('mouseenter', () => {
-      isHovered = true;
-      targetSpeed = fastSpeed;
-    });
+      container.addEventListener('mouseenter', () => {
+        isHovered = true;
+        targetSpeed = fastSpeed;
+      });
 
-    container.addEventListener('mouseleave', () => {
-      isHovered = false;
-      targetSpeed = baseSpeed;
-      if (isDown) isDown = false;
-    });
+      container.addEventListener('mouseleave', () => {
+        isHovered = false;
+        targetSpeed = baseSpeed;
+        if (isDown) isDown = false;
+      });
 
-    // RAF를 이용한 끊김 없는 부드러운 자동 스크롤 루프
-    function autoScrollLoop() {
-      // 속도 부드러운 전환 (Easing)
-      currentSpeed += (targetSpeed - currentSpeed) * 0.08;
+      // RAF를 이용한 끊김 없는 부드러운 자동 스크롤 루프
+      function autoScrollLoop() {
+        currentSpeed += (targetSpeed - currentSpeed) * 0.08;
 
-      if (!isDown) {
-        container.scrollLeft += currentSpeed;
+        if (!isDown) {
+          container.scrollLeft += currentSpeed;
 
-        // 원본 컨텐츠 너비에 도달하면 0으로 매끄럽게 리셋 (무한 루프)
-        const halfWidth = strip.scrollWidth / 2;
-        if (container.scrollLeft >= halfWidth) {
-          container.scrollLeft -= halfWidth;
-        } else if (container.scrollLeft <= 0 && currentSpeed < 0) {
-          container.scrollLeft += halfWidth;
+          const halfWidth = strip.scrollWidth / 2;
+          if (halfWidth > 0) {
+            if (container.scrollLeft >= halfWidth) {
+              container.scrollLeft -= halfWidth;
+            } else if (container.scrollLeft <= 0 && currentSpeed < 0) {
+              container.scrollLeft += halfWidth;
+            }
+          }
         }
+
+        requestAnimationFrame(autoScrollLoop);
       }
 
-      requestAnimationFrame(autoScrollLoop);
-    }
+      // 마우스 드래그 인터랙션 지원
+      container.addEventListener('mousedown', (e) => {
+        isDown = true;
+        startX = e.pageX - container.offsetLeft;
+        scrollLeftPos = container.scrollLeft;
+      });
 
-    // 마우스 드래그 인터랙션 지원
-    container.addEventListener('mousedown', (e) => {
-      isDown = true;
-      startX = e.pageX - container.offsetLeft;
-      scrollLeftPos = container.scrollLeft;
-    });
+      window.addEventListener('mouseup', () => {
+        isDown = false;
+      });
 
-    window.addEventListener('mouseup', () => {
-      isDown = false;
-    });
-
-    window.addEventListener('mousemove', (e) => {
-      if (!isDown) return;
-      e.preventDefault();
-      const x = e.pageX - container.offsetLeft;
-      const walk = (x - startX) * 1.5;
-      container.scrollLeft = scrollLeftPos - walk;
-
-      const halfWidth = strip.scrollWidth / 2;
-      if (container.scrollLeft >= halfWidth) {
-        container.scrollLeft -= halfWidth;
-        scrollLeftPos -= halfWidth;
-      } else if (container.scrollLeft <= 0) {
-        container.scrollLeft += halfWidth;
-        scrollLeftPos += halfWidth;
-      }
-    });
-
-    // 마우스 휠 지원 (가로 스크롤 매핑)
-    container.addEventListener('wheel', (e) => {
-      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+      window.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
         e.preventDefault();
-        container.scrollLeft += e.deltaY;
+        const x = e.pageX - container.offsetLeft;
+        const walk = (x - startX) * 1.5;
+        container.scrollLeft = scrollLeftPos - walk;
+
         const halfWidth = strip.scrollWidth / 2;
-        if (container.scrollLeft >= halfWidth) {
-          container.scrollLeft -= halfWidth;
-        } else if (container.scrollLeft <= 0) {
-          container.scrollLeft += halfWidth;
+        if (halfWidth > 0) {
+          if (container.scrollLeft >= halfWidth) {
+            container.scrollLeft -= halfWidth;
+            scrollLeftPos -= halfWidth;
+          } else if (container.scrollLeft <= 0) {
+            container.scrollLeft += halfWidth;
+            scrollLeftPos += halfWidth;
+          }
         }
+      });
+
+      // 마우스 휠 지원 (가로 스크롤 매핑)
+      container.addEventListener('wheel', (e) => {
+        if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+          e.preventDefault();
+          container.scrollLeft += e.deltaY;
+          const halfWidth = strip.scrollWidth / 2;
+          if (halfWidth > 0) {
+            if (container.scrollLeft >= halfWidth) {
+              container.scrollLeft -= halfWidth;
+            } else if (container.scrollLeft <= 0) {
+              container.scrollLeft += halfWidth;
+            }
+          }
+        }
+      }, { passive: false });
+
+      // 좌우 화살표 버튼 클릭 시 빠른 스킵 지원
+      const arrowLeft = document.getElementById('galleryArrowLeft');
+      const arrowRight = document.getElementById('galleryArrowRight');
+
+      if (arrowRight) {
+        arrowRight.addEventListener('click', (e) => {
+          e.stopPropagation();
+          container.scrollLeft += window.innerWidth * 0.45;
+          const halfWidth = strip.scrollWidth / 2;
+          if (halfWidth > 0 && container.scrollLeft >= halfWidth) {
+            container.scrollLeft -= halfWidth;
+          }
+        });
       }
-    }, { passive: false });
 
-    // 좌우 화살표 버튼 클릭 시 빠른 스킵 지원
-    const arrowLeft = document.getElementById('galleryArrowLeft');
-    const arrowRight = document.getElementById('galleryArrowRight');
+      if (arrowLeft) {
+        arrowLeft.addEventListener('click', (e) => {
+          e.stopPropagation();
+          container.scrollLeft -= window.innerWidth * 0.45;
+          const halfWidth = strip.scrollWidth / 2;
+          if (halfWidth > 0 && container.scrollLeft <= 0) {
+            container.scrollLeft += halfWidth;
+          }
+        });
+      }
 
-    if (arrowRight) {
-      arrowRight.addEventListener('click', (e) => {
-        e.stopPropagation();
-        container.scrollLeft += window.innerWidth * 0.45;
-        const halfWidth = strip.scrollWidth / 2;
-        if (container.scrollLeft >= halfWidth) {
-          container.scrollLeft -= halfWidth;
-        }
-      });
-    }
-
-    if (arrowLeft) {
-      arrowLeft.addEventListener('click', (e) => {
-        e.stopPropagation();
-        container.scrollLeft -= window.innerWidth * 0.45;
-        const halfWidth = strip.scrollWidth / 2;
-        if (container.scrollLeft <= 0) {
-          container.scrollLeft += halfWidth;
-        }
-      });
-    }
-
-    // 루프 실행 시작
-    requestAnimationFrame(autoScrollLoop);
+      // 루프 실행 시작
+      requestAnimationFrame(autoScrollLoop);
+    });
   </script>
 </body>
 </html>
