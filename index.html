@@ -16,7 +16,7 @@
     html, body {
       height: 100%;
       overflow: hidden;
-      background: #ffffff;
+      background: #efefef;
       user-select: none;
     }
 
@@ -31,10 +31,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #ffffff;
+      background: #efefef;
     }
 
-    /* 슬라이드 아이템들 (가운데 배치 & 잘림 방지) */
+    /* 슬라이드 아이템들 (눈부심 없는 크로스페이드: 이전 슬라이드 위에 새 슬라이드가 부드럽게 겹치며 전환) */
     .slide-item {
       position: absolute;
       inset: 0;
@@ -46,15 +46,22 @@
       padding: clamp(60px, 8vh, 100px) clamp(24px, 6vw, 80px);
       opacity: 0;
       visibility: hidden;
-      transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 5s cubic-bezier(0.1, 0, 0.2, 1);
-      transform: scale(0.96);
-      will-change: opacity, transform;
+      z-index: 1;
+      transition: opacity 0.8s ease-in-out;
+      will-change: opacity;
     }
 
+    /* 직전 활성화 슬라이드 (바탕이 비치지 않게 유지) */
+    .slide-item.is-previous {
+      opacity: 1;
+      visibility: visible;
+      z-index: 1;
+    }
+
+    /* 현재 활성화 슬라이드 */
     .slide-item.is-active {
       opacity: 1;
       visibility: visible;
-      transform: scale(1);
       z-index: 2;
     }
 
@@ -197,24 +204,24 @@
   <!-- 메인 Real Cover 슬라이드쇼 스테이지 -->
   <main class="hero-slideshow-wrap" id="slideshowWrap">
 
-    <!-- Real Cover 이미지 6장 -->
+    <!-- Real Cover 이미지 6장 (새 파일명 반영) -->
     <div class="slide-item is-active" data-index="0">
       <img src="Real Cover/SITE/Frame 51.png" alt="hyeong™ Cover 01">
     </div>
     <div class="slide-item" data-index="1">
-      <img src="Real Cover/SITE/Frame 52.png" alt="hyeong™ Cover 02">
+      <img src="Real Cover/SITE/Frame 57.png" alt="hyeong™ Cover 02">
     </div>
     <div class="slide-item" data-index="2">
-      <img src="Real Cover/SITE/Frame 53.png" alt="hyeong™ Cover 03">
+      <img src="Real Cover/SITE/Frame 58.png" alt="hyeong™ Cover 03">
     </div>
     <div class="slide-item" data-index="3">
-      <img src="Real Cover/SITE/Frame 54.png" alt="hyeong™ Cover 04">
+      <img src="Real Cover/SITE/Frame 59.png" alt="hyeong™ Cover 04">
     </div>
     <div class="slide-item" data-index="4">
-      <img src="Real Cover/SITE/Frame 55.png" alt="hyeong™ Cover 05">
+      <img src="Real Cover/SITE/Frame 60.png" alt="hyeong™ Cover 05">
     </div>
     <div class="slide-item" data-index="5">
-      <img src="Real Cover/SITE/Frame 56.png" alt="hyeong™ Cover 06">
+      <img src="Real Cover/SITE/Frame 61.png" alt="hyeong™ Cover 06">
     </div>
 
     <!-- 하단 미니멀 슬라이드 정보 및 인디케이터 -->
@@ -249,13 +256,25 @@
     let slideTimer = null;
 
     function showSlide(index) {
-      // 기존 슬라이드 비활성화
-      slides.forEach((slide, i) => {
-        slide.classList.remove('is-active');
-        if (i === index) {
-          slide.classList.add('is-active');
-        }
+      if (index === currentIndex && slides[index].classList.contains('is-active')) {
+        return;
+      }
+
+      const prevIndex = currentIndex;
+      const prevSlide = slides[prevIndex];
+      const nextSlideEl = slides[index];
+
+      // 이전 슬라이드는 밑(z-index: 1)에 그대로 두고, 새 슬라이드를 위(z-index: 2)에서 부드럽게 페이드인
+      slides.forEach((slide) => {
+        slide.classList.remove('is-previous');
       });
+
+      if (prevSlide && prevSlide !== nextSlideEl) {
+        prevSlide.classList.add('is-previous');
+        prevSlide.classList.remove('is-active');
+      }
+
+      nextSlideEl.classList.add('is-active');
 
       // 바 인디케이터 상태 업데이트
       bars.forEach((bar, i) => {
@@ -268,7 +287,6 @@
           bar.classList.add('is-passed');
           fill.style.width = '100%';
         } else if (i === index) {
-          // 강제 리플로우 후 3초 애니메이션 시작
           void bar.offsetWidth;
           bar.classList.add('is-active');
           fill.style.transition = `width ${intervalDuration}ms linear`;
@@ -279,6 +297,13 @@
       // 번호 텍스트 갱신 (01 ~ 06)
       currentNumEl.textContent = String(index + 1).padStart(2, '0');
       currentIndex = index;
+
+      // 트랜지션 완료(800ms) 후 이전 슬라이드의 클래스 정리
+      setTimeout(() => {
+        if (prevSlide && prevSlide !== slides[currentIndex]) {
+          prevSlide.classList.remove('is-previous');
+        }
+      }, 850);
     }
 
     function nextSlide() {
