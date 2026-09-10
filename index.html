@@ -128,40 +128,6 @@
       font-variant-numeric: tabular-nums;
     }
 
-    .slide-bars {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-    }
-
-    .slide-bar {
-      width: 28px;
-      height: 2px;
-      background: rgba(0, 0, 0, 0.12);
-      border-radius: 1px;
-      overflow: hidden;
-      position: relative;
-      cursor: pointer;
-    }
-
-    .slide-bar-fill {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 0%;
-      background: #000000;
-    }
-
-    .slide-bar.is-active .slide-bar-fill {
-      width: 100%;
-      transition: width 3s linear;
-    }
-
-    .slide-bar.is-passed .slide-bar-fill {
-      width: 100%;
-    }
-
     .slide-enter-link {
       color: #000000;
       text-decoration: none;
@@ -226,19 +192,10 @@
       <img src="Real Cover/SITE/Frame 61.png" alt="hyeong™ Cover 06">
     </div>
 
-    <!-- 하단 미니멀 슬라이드 정보 및 인디케이터 -->
+    <!-- 하단 미니멀 슬라이드 정보 -->
     <div class="slide-footer-info">
       <div class="slide-counter">
         <span id="currentSlideNum">01</span> / 06
-      </div>
-
-      <div class="slide-bars" id="slideBars">
-        <div class="slide-bar is-active"><div class="slide-bar-fill"></div></div>
-        <div class="slide-bar"><div class="slide-bar-fill"></div></div>
-        <div class="slide-bar"><div class="slide-bar-fill"></div></div>
-        <div class="slide-bar"><div class="slide-bar-fill"></div></div>
-        <div class="slide-bar"><div class="slide-bar-fill"></div></div>
-        <div class="slide-bar"><div class="slide-bar-fill"></div></div>
       </div>
 
       <a href="about.html" class="slide-enter-link">Enter Studio</a>
@@ -250,7 +207,6 @@
   <script>
     /* ── Real Cover 3초 자동 전환 슬라이드쇼 스크립트 ── */
     const slides = document.querySelectorAll('.slide-item');
-    const bars = document.querySelectorAll('.slide-bar');
     const currentNumEl = document.getElementById('currentSlideNum');
     const totalSlides = slides.length;
     let currentIndex = 0;
@@ -278,24 +234,6 @@
 
       nextSlideEl.classList.add('is-active');
 
-      // 바 인디케이터 상태 업데이트
-      bars.forEach((bar, i) => {
-        bar.classList.remove('is-active', 'is-passed');
-        const fill = bar.querySelector('.slide-bar-fill');
-        fill.style.transition = 'none';
-        fill.style.width = '0%';
-        
-        if (i < index) {
-          bar.classList.add('is-passed');
-          fill.style.width = '100%';
-        } else if (i === index) {
-          void bar.offsetWidth;
-          bar.classList.add('is-active');
-          fill.style.transition = `width ${intervalDuration}ms linear`;
-          fill.style.width = '100%';
-        }
-      });
-
       // 번호 텍스트 갱신 (01 ~ 06)
       currentNumEl.textContent = String(index + 1).padStart(2, '0');
       currentIndex = index;
@@ -315,23 +253,13 @@
 
     function startAutoSlide() {
       if (slideTimer) clearInterval(slideTimer);
-      // 첫 슬라이드 바 애니메이션 시작
       showSlide(0);
       slideTimer = setInterval(nextSlide, intervalDuration);
     }
 
-    // 클릭 시 해당 슬라이드로 바로 이동
-    bars.forEach((bar, i) => {
-      bar.addEventListener('click', () => {
-        clearInterval(slideTimer);
-        showSlide(i);
-        slideTimer = setInterval(nextSlide, intervalDuration);
-      });
-    });
-
-    // 화면 클릭 시 다음 슬라이드로 넘어가는 직관적인 제스처 지원 (링크/바 제외)
+    // 화면 클릭 시 다음 슬라이드로 넘어가는 직관적인 제스처 지원 (링크 및 헤더 제외)
     document.getElementById('slideshowWrap').addEventListener('click', (e) => {
-      if (e.target.closest('.slide-bars') || e.target.closest('a') || e.target.closest('header')) return;
+      if (e.target.closest('a') || e.target.closest('header')) return;
       clearInterval(slideTimer);
       nextSlide();
       slideTimer = setInterval(nextSlide, intervalDuration);
