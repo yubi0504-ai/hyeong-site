@@ -93,7 +93,9 @@
 
         <!-- ③ Jjindobaegi 비디오 (GRIP과 동일한 비디오 블록) -->
         <div class="detail-video-block fade-in">
-          <video src="../video/jin-video.mp4" autoplay loop muted playsinline controls></video>
+          <video autoplay loop muted playsinline controls preload="auto">
+            <source src="../video/jin-video.mp4" type="video/mp4">
+          </video>
         </div>
 
         <!-- 이전/다음 프로젝트 네비게이션 -->
