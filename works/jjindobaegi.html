@@ -31,44 +31,67 @@
 
   <!-- 메인 콘텐츠 -->
   <main class="main-content">
-    <div class="project-detail">
+    <div class="detail-story-layout">
       <div class="content-wrapper">
 
-        <!-- 프로젝트 정보 -->
-        <div class="project-hero fade-in">
-          <h1 class="project-hero__title">Jjindobaegi</h1>
-          <div class="project-hero__meta">
-            <div class="project-hero__meta-item">
-              <strong>Category</strong>
-              Object
-            </div>
-            <div class="project-hero__meta-item">
-              <strong>Year</strong>
-              2023
-            </div>
-            <div class="project-hero__meta-item">
-              <strong>Role</strong>
-              Product Designer
+        <!-- ① 프로젝트 정보 & 개요 (GRIP과 동일한 시안 2열 구조) -->
+        <div class="detail-overview fade-in">
+          <div class="overview-left">
+            <span class="overview-category">Object</span>
+            <h1 class="overview-title">Jjindobaegi</h1>
+            <div class="overview-meta-list">
+              <div class="overview-meta-row">
+                <span class="label">Client</span>
+                <span class="value">Hyeong</span>
+              </div>
+              <div class="overview-meta-row">
+                <span class="label">Services</span>
+                <span class="value">Object Design</span>
+              </div>
+              <div class="overview-meta-row">
+                <span class="label">Year</span>
+                <span class="value">2023</span>
+              </div>
+              <div class="overview-meta-row">
+                <span class="label">Designer</span>
+                <span class="value">Park Yubi</span>
+              </div>
             </div>
           </div>
-          <p class="project-hero__desc">
-            일상의 경험에서 출발한 제품 디자인 프로젝트입니다.
-            사용자의 행동과 습관을 관찰하고, 직관적이면서도 감성적인 형태를 탐구하였습니다.
-            컨셉 스케치부터 3D 모델링, 목업 제작까지 전 과정을 수행하였습니다.
-          </p>
+
+          <div class="overview-right">
+            <p class="overview-desc-p">
+              Jjindobaegi는 전통적 신앙 대상인 솟대를 현대적인 데스크 오브제로 재해석한 프로젝트입니다. 일상 속에서 사용자의 행동과 감성을 관찰하고, 직관적이면서도 감성적인 조형미를 탐구하였습니다.
+            </p>
+            <p class="overview-desc-p">
+              컨셉 스케치부터 3D 모델링, 정밀 프로토타입 제작까지 전 과정을 수행하며 공간에 자연스럽게 녹아드는 단정하고 우아한 실루엣을 완성하였습니다.
+            </p>
+          </div>
         </div>
 
-        <!-- 프로젝트 이미지 -->
-        <div class="project-images">
-          <img src="../02-WORK-DETAIL/Jin/SITE/Instagram post - 111.png" alt="Jjindobaegi 디테일 01">
-          <img src="../02-WORK-DETAIL/Jin/SITE/Instagram post - 112.png" alt="Jjindobaegi 디테일 02">
-          <img src="../02-WORK-DETAIL/Jin/SITE/Instagram post - 113.png" alt="Jjindobaegi 디테일 03">
-          <img src="../02-WORK-DETAIL/Jin/SITE/Instagram post - 114.png" alt="Jjindobaegi 디테일 04">
-          <img src="../02-WORK-DETAIL/Jin/SITE/Instagram post - 116.png" alt="Jjindobaegi 디테일 05">
-          <img src="../02-WORK-DETAIL/Jin/SITE/image 472305031-4 1.png" alt="Jjindobaegi 디테일 06">
+        <!-- ② Jjindobaegi 메인 이미지 흐름 (GRIP과 동일한 story-block 컨테이너 및 크기 적용) -->
+        <div class="detail-story-flow">
+          <div class="story-block fade-in">
+            <img src="../02-WORK-DETAIL/Jin/SITE/Instagram post - 111.png" alt="Jjindobaegi 01">
+          </div>
+          <div class="story-block fade-in">
+            <img src="../02-WORK-DETAIL/Jin/SITE/Instagram post - 112.png" alt="Jjindobaegi 02">
+          </div>
+          <div class="story-block fade-in">
+            <img src="../02-WORK-DETAIL/Jin/SITE/Instagram post - 113.png" alt="Jjindobaegi 03">
+          </div>
+          <div class="story-block fade-in">
+            <img src="../02-WORK-DETAIL/Jin/SITE/Instagram post - 114.png" alt="Jjindobaegi 04">
+          </div>
+          <div class="story-block fade-in">
+            <img src="../02-WORK-DETAIL/Jin/SITE/Instagram post - 116.png" alt="Jjindobaegi 05">
+          </div>
+          <div class="story-block fade-in">
+            <img src="../02-WORK-DETAIL/Jin/SITE/image 472305031-4 1.png" alt="Jjindobaegi 06">
+          </div>
         </div>
 
-        <!-- 이전/다음 프로젝트 -->
+        <!-- 이전/다음 프로젝트 네비게이션 -->
         <nav class="project-nav">
           <a href="grip.html">← Prev</a>
           <a href="../work.html" class="project-nav__back">All Works</a>
