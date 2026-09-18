@@ -577,13 +577,15 @@ ul, ol { list-style: none; }
 
 /* ===== 반응형 (태블릿) ===== */
 @media (max-width: 900px) {
-  :root { --pad: 8vw; }
+  :root { --pad: 6vw; }
   .projects-grid { grid-template-columns: repeat(2, 1fr); }
+  .main-nav { gap: 20px; }
+  .main-nav a { font-size: 13.5px; }
 }
 
-/* ===== 반응형 (모바일) ===== */
-@media (max-width: 640px) {
-  :root { --header-h: 56px; --pad: 6vw; }
+/* ===== 반응형 (모바일 & 소형 태블릿) ===== */
+@media (max-width: 768px) {
+  :root { --header-h: 56px; --pad: 5vw; }
 
   body { font-size: 14px; }
 
@@ -595,14 +597,16 @@ ul, ol { list-style: none; }
     background: var(--color-bg);
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     gap: 32px;
+    z-index: 1000;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s, visibility 0.3s;
+    transition: opacity 0.3s var(--ease), visibility 0.3s var(--ease);
   }
 
   .main-nav.is-open { opacity: 1; visibility: visible; }
-  .main-nav a { font-size: 16px; }
+  .main-nav a { font-size: 18px; }
 
   .projects-grid { grid-template-columns: 1fr; gap: 14px; }
   .projects-section { padding: 32px 0 72px; }
