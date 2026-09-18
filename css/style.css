@@ -112,7 +112,7 @@ ul, ol { list-style: none; }
   border: none;
   cursor: pointer;
   padding: 0;
-  z-index: 1001;
+  z-index: 1600;
 }
 
 .menu-toggle span {
@@ -593,19 +593,28 @@ ul, ol { list-style: none; }
 
   .main-nav {
     position: fixed;
-    inset: 0;
-    background: var(--color-bg);
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    background-color: #f3f3f3 !important; /* 모바일 메뉴 펼침 시 뒤 화면(메인 커버 이미지 등)이 비치거나 잘려 보이지 않도록 순수 불투명 배경 지정 */
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 32px;
-    z-index: 1000;
+    z-index: 1500;
     opacity: 0;
     visibility: hidden;
+    pointer-events: none;
     transition: opacity 0.3s var(--ease), visibility 0.3s var(--ease);
   }
 
-  .main-nav.is-open { opacity: 1; visibility: visible; }
+  .main-nav.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
   .main-nav a { font-size: 18px; }
 
   .projects-grid { grid-template-columns: 1fr; gap: 14px; }
