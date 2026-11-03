@@ -267,10 +267,16 @@ ul, ol { list-style: none; }
 }
 
 .detail-overview {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  margin-bottom: 64px;
+}
+
+.overview-top-row {
   display: grid;
   grid-template-columns: 280px 1fr;
   gap: 48px;
-  margin-bottom: 64px;
   align-items: start;
 }
 
@@ -320,12 +326,12 @@ ul, ol { list-style: none; }
 }
 
 .overview-awards {
-  margin-top: 28px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 22px;
-  flex-wrap: nowrap;
+  gap: 24px;
+  flex-wrap: wrap;
+  padding-top: 8px;
 }
 
 .overview-award-logo {
@@ -341,8 +347,8 @@ ul, ol { list-style: none; }
   height: 48px;
 }
 
-.overview-award-logo--kdesign {
-  height: 42px;
+.overview-award-logo--dia {
+  height: 44px;
 }
 
 .overview-award-logo--pinup {
@@ -536,7 +542,7 @@ ul, ol { list-style: none; }
 }
 
 @media (max-width: 900px) {
-  .detail-overview {
+  .overview-top-row {
     grid-template-columns: 1fr;
     gap: 32px;
   }
