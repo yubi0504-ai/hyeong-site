@@ -319,6 +319,16 @@ ul, ol { list-style: none; }
   color: #333333;
 }
 
+.overview-award {
+  margin-top: 24px;
+}
+
+.overview-award-logo {
+  display: block;
+  max-width: 150px;
+  height: auto;
+}
+
 .overview-right {
   display: flex;
   flex-direction: column;
