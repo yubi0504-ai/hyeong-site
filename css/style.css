@@ -372,11 +372,6 @@ ul, ol { list-style: none; }
   max-width: 680px;
 }
 
-.overview-desc-p--en {
-  margin-top: 8px;
-  color: #444444;
-}
-
 .detail-story-flow {
   display: flex;
   flex-direction: column;
