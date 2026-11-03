@@ -267,16 +267,10 @@ ul, ol { list-style: none; }
 }
 
 .detail-overview {
-  display: flex;
-  flex-direction: column;
-  gap: 36px;
-  margin-bottom: 64px;
-}
-
-.overview-top-row {
   display: grid;
   grid-template-columns: 280px 1fr;
   gap: 48px;
+  margin-bottom: 64px;
   align-items: start;
 }
 
@@ -326,17 +320,17 @@ ul, ol { list-style: none; }
 }
 
 .overview-awards {
+  margin-top: 24px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 24px;
+  gap: 16px;
   flex-wrap: wrap;
-  padding-top: 8px;
 }
 
 .overview-award-logo {
   display: block;
-  height: 40px;
+  height: 38px;
   width: auto;
   max-width: none;
   object-fit: contain;
@@ -362,20 +356,15 @@ ul, ol { list-style: none; }
 .overview-right {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding-top: 2px;
+  gap: 18px;
 }
 
 .overview-desc-p {
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.75;
-  color: #111111;
-  letter-spacing: -0.01em;
-  word-break: keep-all;
-  overflow-wrap: break-word;
-  text-wrap: pretty;
-  max-width: 680px;
+  font-size: 13.5px;
+  font-weight: 600;
+  line-height: 1.7;
+  color: #1a1a1a;
+  letter-spacing: -0.15px;
 }
 
 .detail-story-flow {
@@ -542,7 +531,7 @@ ul, ol { list-style: none; }
 }
 
 @media (max-width: 900px) {
-  .overview-top-row {
+  .detail-overview {
     grid-template-columns: 1fr;
     gap: 32px;
   }
